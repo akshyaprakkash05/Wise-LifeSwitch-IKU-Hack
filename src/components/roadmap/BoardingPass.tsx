@@ -1,29 +1,29 @@
 "use client";
 
 import { DOCS, PERSON, ROADMAP } from "@/lib/demo-data";
-import { dayAndMonth, daysUntil, type summarise } from "@/lib/roadmap";
+import { daysUntil, type summarise } from "@/lib/roadmap";
 import { useApp } from "@/state/app-state";
 import { Icon } from "../Icon";
 
 type Summary = ReturnType<typeof summarise>;
 
 export function BoardingPass({ summary }: { summary: Summary }) {
-  const { t, money, moneyAlt, dispatch, items, trip } = useApp();
+  const { t, money, moneyAlt, dispatch, items, trip, itemText, fmt } = useApp();
   const { next, percent, paidCount } = summary;
   const docsRead = new Set(ROADMAP.map((i) => i.doc)).size;
   const planeLeft = Math.min(92, Math.max(4, percent));
 
   return (
-    <section className="pass" aria-label="Your move">
+    <section className="pass" aria-label={t("yourMove")}>
       <div className="pass-main">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-          <span className="eyebrow" style={{ color: "var(--lime)" }}>LifeSwitch boarding pass</span>
-          <span className="pill p-fam">{trip.purpose} · {trip.to.city}</span>
+          <span className="eyebrow" style={{ color: "var(--lime)" }}>{t("passTitle")}</span>
+          <span className="pill p-fam">{t(`p_${trip.purpose}`)} · {trip.to.city}</span>
         </div>
         <div className="pass-route">
           <div>
             <div className="code">{trip.from.code}</div>
-            <div className="city">{trip.from.city}, {trip.from.name}</div>
+            <div className="city">{trip.from.city}, {fmt.country(trip.from)}</div>
           </div>
           <div className="flight">
             <svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true">
@@ -39,10 +39,10 @@ export function BoardingPass({ summary }: { summary: Summary }) {
           </div>
         </div>
         <div className="pass-fields">
-          <div><span>Passenger</span><b>{PERSON.fullName}</b></div>
-          {trip.course && <div><span>{trip.purpose === "Study" ? "Course" : "Role"}</span><b>{trip.course}</b></div>}
-          <div><span>Documents</span><b>{docsRead} read by AI · {Object.keys(DOCS).length - docsRead} to add</b></div>
-          <div><span>{t("progress")}</span><b className="num">{percent}% · {paidCount}/{items.length} paid</b></div>
+          <div><span>{t("passenger")}</span><b>{PERSON.fullName}</b></div>
+          {trip.course && <div><span>{t(trip.purpose === "Study" ? "course" : "role")}</span><b>{trip.course}</b></div>}
+          <div><span>{t("documents")}</span><b>{t("docsRead", { read: docsRead, left: Object.keys(DOCS).length - docsRead })}</b></div>
+          <div><span>{t("progress")}</span><b className="num">{t("passProgress", { p: percent, paid: paidCount, total: items.length })}</b></div>
         </div>
       </div>
 
@@ -50,12 +50,12 @@ export function BoardingPass({ summary }: { summary: Summary }) {
         {next ? (
           <>
             <span className="eyebrow" style={{ color: "var(--forest)" }}>
-              {t("next")} · {daysUntil(next.due) > 0 ? `in ${daysUntil(next.due)} days` : "due now"}
+              {t("next")} · {daysUntil(next.due) > 0 ? t("inDays", { n: daysUntil(next.due) }) : t("dueNow")}
             </span>
             <span className="big num">{money(next.amountGbp)}</span>
             <span className="mono num" style={{ fontSize: 13 }}>≈ {moneyAlt(next.amountGbp)}</span>
             <b>
-              {next.title} · due {dayAndMonth(next.due).day} {dayAndMonth(next.due).month}
+              {itemText(next, "title")} · {t("dueOn", { date: fmt.shortDate(next.due) })}
             </b>
             <button type="button" className="btn dark" onClick={() => dispatch({ type: "openPay", id: next.id })}>
               {t("payWise")}
@@ -65,8 +65,8 @@ export function BoardingPass({ summary }: { summary: Summary }) {
           </>
         ) : (
           <>
-            <span className="big">All paid.</span>
-            <b>Welcome to {trip.to.city}, {PERSON.name}.</b>
+            <span className="big">{t("allPaid")}</span>
+            <b>{t("welcome", { city: trip.to.city, name: PERSON.name })}</b>
           </>
         )}
       </div>

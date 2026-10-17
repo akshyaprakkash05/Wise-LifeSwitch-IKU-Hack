@@ -51,7 +51,7 @@ function Rail() {
           <small>Wise track · IKU</small>
         </div>
       </div>
-      <nav className="nav" aria-label="Main">
+      <nav className="nav" aria-label={t("mainMenu")}>
         {NAV.map((item) => {
           const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
           return (
@@ -67,15 +67,15 @@ function Rail() {
         })}
       </nav>
       <div className="rail-foot">
-        <p>Demo for the IKU Womxn in STEM Hackathon. Sample data. Not affiliated with Wise.</p>
+        <p>{t("demoNote")}</p>
         <button
           type="button"
           onClick={() => {
             dispatch({ type: "reset" });
-            notify("Demo reset. Tara's roadmap is back to the start.");
+            notify(t("resetDone", { name: PERSON.name }));
           }}
         >
-          Reset demo
+          {t("resetDemo")}
         </button>
       </div>
     </aside>
@@ -83,15 +83,15 @@ function Rail() {
 }
 
 function TopBar() {
-  const { state, dispatch, trip } = useApp();
+  const { state, dispatch, trip, t } = useApp();
 
   return (
     <div className="topbar">
       <span className="crumb">
-        {trip.from.code} → {trip.to.code} · {trip.purpose}
+        {trip.from.code} → {trip.to.code} · {t(`p_${trip.purpose}`)}
       </span>
       <div className="field-inline">
-        <label htmlFor="lang-select" aria-label="Language">
+        <label htmlFor="lang-select" aria-label={t("language")}>
           <Icon name="globe" size={16} />
         </label>
         <select
@@ -106,7 +106,7 @@ function TopBar() {
           ))}
         </select>
       </div>
-      <div className="segs" role="group" aria-label="Show amounts in">
+      <div className="segs" role="group" aria-label={t("showAmountsIn")}>
         {(["GBP", "USD"] as Currency[]).map((c) => (
           <button
             key={c}

@@ -4,9 +4,9 @@ import { BUDGET } from "@/lib/demo-data";
 import { useApp } from "@/state/app-state";
 
 const ROWS = [
-  { key: "tuition", label: "Tuition", color: "var(--forest)" },
-  { key: "housing", label: "Housing", color: "var(--lime)" },
-  { key: "living", label: "Living, Sep to Nov", color: "var(--saffron)" },
+  { key: "tuition", label: "tuition", color: "var(--forest)" },
+  { key: "housing", label: "housing", color: "var(--lime)" },
+  { key: "living", label: "livingPeriod", color: "var(--saffron)" },
 ] as const;
 
 export function BudgetCard() {
@@ -17,7 +17,7 @@ export function BudgetCard() {
     <div className="card" style={{ display: "grid", gap: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
         <span className="eyebrow">{t("budget")}</span>
-        <span className="pill p-idle">Living is an estimate</span>
+        <span className="pill p-idle">{t("livingEstimate")}</span>
       </div>
       <div>
         <span className="big num" style={{ fontSize: 38 }}>{money(total)}</span>{" "}
@@ -32,7 +32,7 @@ export function BudgetCard() {
         {ROWS.map((r) => (
           <li key={r.key} style={{ display: "flex", gap: 8, alignItems: "center" }}>
             <i style={{ width: 10, height: 10, borderRadius: 3, background: r.color }} />
-            <span style={{ flex: 1 }}>{r.label}</span>
+            <span style={{ flex: 1 }}>{t(r.label)}</span>
             <b className="num">{money(BUDGET[r.key])}</b>
           </li>
         ))}

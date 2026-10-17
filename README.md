@@ -15,7 +15,7 @@ LifeSwitch sorts every payment the move demands and keeps your family close whil
 - **Pay with Wise**: Check → Confirm → Sent. Nothing sends without a ticked confirmation. A missing reference blocks the payment until it's added.
 - **Progress ring, first-term budget, LifeSwitch Circle feed** that updates when a payment is made.
 - **Rent reminder** pop-up with one-tap Pay with Wise.
-- **Language dropdown** (English, Tamil, Hindi, Spanish, French, Chinese) and **GBP / USD** toggle.
+- **Language dropdown** (English, Tamil, Hindi, Spanish, French, Chinese) that translates every screen, with dates and country names in each language's own format, and a **GBP / USD** toggle. Quotes from documents stay in their original language.
 - **Listen** button reads the roadmap aloud with **ElevenLabs** (multilingual voice; native Tamil voice in Tamil), falling back to the browser voice if ElevenLabs isn't set up.
 - **Reset demo** in the side menu puts everything back to the start.
 
@@ -67,7 +67,8 @@ src/
     setup/                Set up move form and live preview
   lib/
     demo-data.ts          Tara's seeded roadmap (replaced by Gemini extraction later)
-    i18n.ts               Translations and term explanations
+    i18n.ts               Translation lookup, dates in each language, term explanations
+    messages/             UI text, one file per language (en.ts is the source; the build fails if a language misses a string)
     money.ts              Currency conversion and formatting
     places.ts             Countries, cities, airport codes and move purposes
     roadmap.ts            Status, progress and due-date logic

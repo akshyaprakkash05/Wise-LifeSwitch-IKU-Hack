@@ -1,20 +1,28 @@
 "use client";
 
-import { DESTINATIONS, ORIGINS, PURPOSES, findCountry } from "@/lib/places";
+import { DESTINATIONS, ORIGINS, findCountry } from "@/lib/places";
 import type { Move } from "@/lib/types";
+import { useApp } from "@/state/app-state";
 import { Icon } from "../Icon";
 
-const STEPS = ["Read your documents", "Build your money roadmap", "Prepare each payment with Wise", "Bring your family along"];
+const STEPS = ["step1", "step2", "step3", "step4"] as const;
 
 /** Live boarding-pass style preview that updates as the user fills in the form. */
 export function MovePreview({ move }: { move: Move }) {
   const from = findCountry(ORIGINS, move.from);
   const to = findCountry(DESTINATIONS, move.to);
-  const purpose = PURPOSES.find((p) => p.value === move.purpose) ?? PURPOSES[0];
+  const { t, state } = useApp();
+  const course = move.course.trim();
+  const [before, after] = t("previewText", {
+    from: from.city,
+    to: to.city,
+    purpose: t(`pl_${move.purpose}`),
+    course: course ? ` (${course})` : "",
+  }).split("{hint}");
 
   return (
-    <aside className="card move-preview" aria-label="Preview of your move" aria-live="polite">
-      <span className="eyebrow" style={{ color: "var(--lime)" }}>Live preview</span>
+    <aside className="card move-preview" aria-label={t("livePreview")} aria-live="polite">
+      <span className="eyebrow" style={{ color: "var(--lime)" }}>{t("livePreview")}</span>
 
       <div className="preview-route">
         <div>
@@ -29,23 +37,23 @@ export function MovePreview({ move }: { move: Move }) {
       </div>
 
       <p style={{ color: "var(--rail-text)" }}>
-        {from.city} to {to.city} for {move.purpose.toLowerCase()}
-        {move.course.trim() ? ` (${move.course.trim()})` : ""}. LifeSwitch will look for{" "}
-        <b style={{ color: "#fff" }}>{purpose.hint.toLowerCase()}</b> in your documents.
+        {before}
+        <b style={{ color: "#fff" }}>{t(`ph_${move.purpose}`).toLocaleLowerCase(state.lang)}</b>
+        {after}
       </p>
 
       <div className="preview-money">
         <span className="mono">{from.currency}</span>
         <Icon name="arrow" size={16} stroke={2.4} />
         <span className="mono">{to.currency}</span>
-        <span style={{ marginLeft: "auto", fontSize: 13, color: "var(--rail-text)" }}>Paid through Wise</span>
+        <span style={{ marginLeft: "auto", fontSize: 13, color: "var(--rail-text)" }}>{t("paidThroughWise")}</span>
       </div>
 
       <ol className="preview-steps">
         {STEPS.map((step, n) => (
           <li key={step}>
             <span className="mono">{n + 1}</span>
-            {step}
+            {t(step)}
           </li>
         ))}
       </ol>

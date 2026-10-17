@@ -22,7 +22,7 @@ export function RoadmapPage() {
     <>
       <div className="phead">
         <h1 className="disp">
-          {t("greet")}, {PERSON.name}.
+          {t("greet", { name: PERSON.name })}
           <br />
           <span style={{ color: "var(--muted)", fontWeight: 700 }}>{t("sorted", { p: summary.percent })}</span>
         </h1>
@@ -50,11 +50,11 @@ export function RoadmapPage() {
       </div>
 
       <p className="foot">
-        Sample data for the demo persona {PERSON.name}. Fees are samples. GBP→USD rate:{" "}
+        {t("footSample", { name: PERSON.name })}{" "}
         {state.fx.source === "live"
-          ? `live reference rate (${state.fx.rate.toFixed(4)}, ${state.fx.asOf})`
-          : `sample (${state.fx.rate})`}
-        . Total roadmap: {money(summary.total)}.
+          ? t("rateLive", { rate: state.fx.rate.toFixed(4), date: state.fx.asOf })
+          : t("rateSampleFoot", { rate: state.fx.rate })}{" "}
+        {t("totalRoadmap", { amount: money(summary.total) })}
       </p>
     </>
   );
