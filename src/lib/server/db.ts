@@ -34,7 +34,6 @@ create table if not exists circle_members (
   circle_id uuid not null references circles(id) on delete cascade,
   name text not null,
   relation text not null,
-  phone text,
   sharing boolean not null default true,
   last_place text,
   last_seen timestamptz not null default now(),

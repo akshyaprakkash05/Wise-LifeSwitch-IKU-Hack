@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui";
 
-export type PersonInput = { name: string; relation: string; phone: string | null };
+export type PersonInput = { name: string; relation: string };
 
-/** Name, relation and an optional phone number for the FaceTime button. */
+/** Name and relation for joining or starting a Circle. */
 export function CirclePersonForm({
   submitLabel,
   defaultName = "",
@@ -33,7 +33,6 @@ export function CirclePersonForm({
       await onSubmit({
         name: String(f.get("name") || "").trim(),
         relation: String(f.get("relation") || defaultRelation),
-        phone: String(f.get("phone") || "").trim() || null,
       });
     } catch (err) {
       setError((err as Error).message);
@@ -52,10 +51,6 @@ export function CirclePersonForm({
         <select id="person-relation" name="relation" defaultValue={defaultRelation} className={field}>
           {relations.map((r) => <option key={r}>{r}</option>)}
         </select>
-      </label>
-      <label className="grid gap-1 text-sm font-semibold">
-        Phone or Apple ID email <span className="font-normal text-muted">Optional, so family can FaceTime you</span>
-        <input id="person-phone" name="phone" maxLength={30} autoComplete="tel" className={field} />
       </label>
       {error && <p className="text-sm text-bad">{error}</p>}
       <Button type="submit" disabled={busy}>

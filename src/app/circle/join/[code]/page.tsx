@@ -24,7 +24,7 @@ export default function JoinCirclePage({ params }: { params: Promise<{ code: str
       <PageHeader
         eyebrow="LifeSwitch Circle"
         title="You've been invited"
-        lead="Join to see their moving-abroad updates, chat, and call. They choose what they share, and so do you."
+        lead="Join to see their moving-abroad updates and chat. They choose what they share, and so do you."
       />
       <Card className="grid gap-4">
         <Eyebrow>Invite code {code}</Eyebrow>

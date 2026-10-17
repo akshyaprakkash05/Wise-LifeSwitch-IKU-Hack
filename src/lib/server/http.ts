@@ -34,5 +34,4 @@ export const MemberIdSchema = z.uuid("Invalid member.");
 export const PersonSchema = z.object({
   name: z.string().trim().min(1, "Add your name.").max(40),
   relation: z.string().trim().min(1).max(30),
-  phone: z.string().trim().max(30).nullish(),
 });

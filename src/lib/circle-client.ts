@@ -56,7 +56,7 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
   return json as T;
 }
 
-type Person = { name: string; relation: string; phone?: string | null };
+type Person = { name: string; relation: string };
 
 export const circleApi = {
   create: (p: Person) => call<Membership>("/api/circle", { method: "POST", body: JSON.stringify(p) }),

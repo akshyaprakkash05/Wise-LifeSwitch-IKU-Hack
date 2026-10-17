@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { Loader2, MapPin, Phone, Receipt, Send, Share2, Video } from "lucide-react";
+import { Loader2, MapPin, Receipt, Send, Share2 } from "lucide-react";
 import { Avatar, Button, ButtonLink, Card, Eyebrow, PageHeader, Pill } from "@/components/ui";
 import { CirclePersonForm } from "@/components/circle-person-form";
 import { circleApi, useCircleFeed, useMembership, type CircleFeed, type Membership } from "@/lib/circle-client";
@@ -23,7 +23,7 @@ export default function CirclePage() {
         <PageHeader
           eyebrow="LifeSwitch Circle"
           title="Nobody moves abroad alone"
-          lead="A private group for you and your family. Share updates like “Rent paid” or “Landed in London”, chat, and call. You control what's shared."
+          lead="A private group for you and your family. Share updates like “Rent paid” or “Landed in London” and chat. You control what's shared."
         />
         <Card className="grid gap-4">
           <h2 className="text-lg font-bold">Start your Circle</h2>
@@ -170,12 +170,6 @@ function Members({ feed, meId }: { feed: CircleFeed; meId: string }) {
                   {online && " · active now"}
                 </p>
               </div>
-              {m.phone && m.id !== meId && (
-                <div className="flex gap-1">
-                  <a href={`facetime-audio:${m.phone}`} aria-label={`Call ${m.name}`} className="rounded-full bg-sunk p-2.5"><Phone size={18} /></a>
-                  <a href={`facetime:${m.phone}`} aria-label={`FaceTime ${m.name}`} className="rounded-full bg-accent p-2.5 text-accent-ink"><Video size={18} /></a>
-                </div>
-              )}
             </Card>
           </li>
         );

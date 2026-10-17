@@ -6,7 +6,6 @@ export interface CircleMemberRow {
   id: string;
   name: string;
   relation: string;
-  phone: string | null;
   sharing: boolean;
   last_place: string | null;
   last_seen: string;
@@ -22,15 +21,15 @@ export interface CircleFeed {
 const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const newCode = () => Array.from({ length: 6 }, () => ALPHABET[Math.floor(Math.random() * ALPHABET.length)]).join("");
 
-export async function createCircle(owner: { name: string; relation: string; phone?: string | null }) {
+export async function createCircle(owner: { name: string; relation: string }) {
   const pool = await db();
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = newCode();
     const res = await pool.query(
       `with c as (insert into circles (code, name) values ($1, $2) on conflict (code) do nothing returning id, code)
-       insert into circle_members (circle_id, name, relation, phone)
-       select id, $3, $4, $5 from c returning id, (select code from c) as code`,
-      [code, `${owner.name}'s Circle`, owner.name, owner.relation, owner.phone ?? null],
+       insert into circle_members (circle_id, name, relation)
+       select id, $3, $4 from c returning id, (select code from c) as code`,
+      [code, `${owner.name}'s Circle`, owner.name, owner.relation],
     );
     if (res.rowCount) {
       const { id, code: c } = res.rows[0];
@@ -41,12 +40,12 @@ export async function createCircle(owner: { name: string; relation: string; phon
   throw new Error("Couldn't create a unique invite code.");
 }
 
-export async function joinCircle(code: string, member: { name: string; relation: string; phone?: string | null }) {
+export async function joinCircle(code: string, member: { name: string; relation: string }) {
   const pool = await db();
   const res = await pool.query(
-    `insert into circle_members (circle_id, name, relation, phone)
-     select id, $2, $3, $4 from circles where code = $1 returning id`,
-    [code, member.name, member.relation, member.phone ?? null],
+    `insert into circle_members (circle_id, name, relation)
+     select id, $2, $3 from circles where code = $1 returning id`,
+    [code, member.name, member.relation],
   );
   if (!res.rowCount) return null;
   const memberId = res.rows[0].id as string;
@@ -61,7 +60,7 @@ export async function getFeed(code: string, since: { activity?: number; message?
   const circleId = c.rows[0].id;
   const [members, activities, messages] = await Promise.all([
     pool.query(
-      `select id, name, relation, phone, sharing, case when sharing then last_place end as last_place, last_seen
+      `select id, name, relation, sharing, case when sharing then last_place end as last_place, last_seen
        from circle_members where circle_id = $1 order by created_at`,
       [circleId],
     ),
