@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { ExtractionResponseSchema, type ExtractionResponse } from "../schemas";
 
 /**
@@ -88,7 +88,13 @@ export async function extractPayments(
           ],
         },
       ],
-      config: { responseMimeType: "application/json", responseJsonSchema: RESPONSE_SCHEMA, temperature: 0 },
+      config: {
+        responseMimeType: "application/json",
+        responseJsonSchema: RESPONSE_SCHEMA,
+        temperature: 0,
+        // Low thinking keeps extraction to a few seconds (default thinking took ~50s on stage-length docs).
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+      },
     });
     text = res.text;
   } catch (err) {
