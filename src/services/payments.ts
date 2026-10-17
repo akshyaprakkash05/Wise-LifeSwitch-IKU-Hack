@@ -57,3 +57,18 @@ export async function sendTransfer(quote: TransferQuote, reference: string): Pro
     createdAt: new Date().toISOString(),
   };
 }
+
+/**
+ * Sends a transfer through our server, which re-runs the bank detail and Scam Shield checks first
+ * (src/app/api/payments/send). Used by the Payments tab. Throws with a readable message if a check fails.
+ */
+export async function sendCheckedTransfer(item: RoadmapItem, reference: string, confirmRisk: boolean): Promise<TransferReceipt> {
+  const res = await fetch("/api/payments/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ item, reference, confirmRisk }),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(body.error || `The transfer couldn't be sent (${res.status}). Nothing left your account.`);
+  return { id: body.id, status: "sent", reference: body.reference, createdAt: body.createdAt };
+}
