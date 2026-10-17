@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import type { Activity, CircleMember, ExtractedItem, MoveProfile, RoadmapItem } from "./types";
-import { PRIYA_ACTIVITY, PRIYA_CIRCLE, PRIYA_PROFILE, priyaRoadmap } from "./demo/priya";
+import type { Activity, CircleMember, ExtractedItem, ManualReminder, MoveProfile, RoadmapItem } from "./types";
+import { PRIYA_ACTIVITY, PRIYA_CIRCLE, PRIYA_PROFILE, PRIYA_REMINDERS, priyaRoadmap } from "./demo/priya";
 
 /**
  * App state for the whole journey.
@@ -16,6 +16,9 @@ interface State {
   items: RoadmapItem[];
   circle: CircleMember[];
   activity: Activity[];
+  reminders: ManualReminder[];
+  /** reminder ids the user dismissed from the pop-up, keyed to the due date they were dismissed for */
+  dismissed: Record<string, string>;
 }
 
 interface Store extends State {
@@ -30,10 +33,15 @@ interface Store extends State {
   removeItem: (id: string) => void;
   markPaid: (id: string) => void;
   addActivity: (a: Omit<Activity, "id" | "at"> & { at?: string }) => void;
+  addReminder: (r: Omit<ManualReminder, "id">) => void;
+  removeReminder: (id: string) => void;
+  /** Marks a manual reminder done: monthly ones roll to next month, one-offs are removed. */
+  completeReminder: (id: string) => void;
+  dismissReminder: (id: string, dueDate: string) => void;
 }
 
 const KEY = "lifeswitch:v1";
-const EMPTY: State = { profile: null, items: [], circle: [], activity: [] };
+const EMPTY: State = { profile: null, items: [], circle: [], activity: [], reminders: [], dismissed: {} };
 const Ctx = createContext<Store | null>(null);
 
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -72,7 +80,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const loadDemo = useCallback(() => {
-    setState({ profile: { ...PRIYA_PROFILE, createdAt: new Date().toISOString() }, items: priyaRoadmap(), circle: PRIYA_CIRCLE, activity: PRIYA_ACTIVITY });
+    setState({
+      ...EMPTY,
+      profile: { ...PRIYA_PROFILE, createdAt: new Date().toISOString() },
+      items: priyaRoadmap(),
+      circle: PRIYA_CIRCLE,
+      activity: PRIYA_ACTIVITY,
+      reminders: PRIYA_REMINDERS(),
+    });
   }, []);
 
   const reset = useCallback(() => setState(EMPTY), []);
@@ -119,9 +134,40 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const addReminder = useCallback((r: Omit<ManualReminder, "id">) => {
+    setState((s) => ({ ...s, reminders: [...s.reminders, { ...r, id: uid() }] }));
+  }, []);
+
+  const removeReminder = useCallback((id: string) => {
+    setState((s) => ({ ...s, reminders: s.reminders.filter((r) => r.id !== id) }));
+  }, []);
+
+  const completeReminder = useCallback((id: string) => {
+    setState((s) => ({
+      ...s,
+      reminders: s.reminders.flatMap((r) => {
+        if (r.id !== id) return [r];
+        if (r.recurring !== "monthly") return [];
+        const d = new Date(r.due_date + "T12:00:00");
+        d.setMonth(d.getMonth() + 1);
+        return [{ ...r, due_date: d.toISOString().slice(0, 10) }];
+      }),
+    }));
+  }, []);
+
+  const dismissReminder = useCallback((id: string, dueDate: string) => {
+    setState((s) => ({ ...s, dismissed: { ...s.dismissed, [id]: dueDate } }));
+  }, []);
+
   const value = useMemo<Store>(
-    () => ({ ...state, ready, setProfile, loadDemo, reset, addExtracted, updateItem, removeItem, markPaid, addActivity }),
-    [state, ready, setProfile, loadDemo, reset, addExtracted, updateItem, removeItem, markPaid, addActivity],
+    () => ({
+      ...state, ready, setProfile, loadDemo, reset, addExtracted, updateItem, removeItem, markPaid, addActivity,
+      addReminder, removeReminder, completeReminder, dismissReminder,
+    }),
+    [
+      state, ready, setProfile, loadDemo, reset, addExtracted, updateItem, removeItem, markPaid, addActivity,
+      addReminder, removeReminder, completeReminder, dismissReminder,
+    ],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

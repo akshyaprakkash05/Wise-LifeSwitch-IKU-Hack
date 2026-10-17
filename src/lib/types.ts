@@ -107,3 +107,29 @@ export interface Activity {
   at: string;
   kind: "payment" | "milestone" | "checkin";
 }
+
+/* ---------- Reminders ---------- */
+
+/** A user-made reminder (e.g. rent on the 1st). Reminders for roadmap items are derived, not stored. */
+export interface ManualReminder {
+  id: string;
+  title: string;
+  amount: number;
+  currency: CurrencyCode;
+  /** Next due date, YYYY-MM-DD. Monthly reminders roll forward after they're marked done. */
+  due_date: string;
+  recurring: "monthly" | null;
+}
+
+/** One entry in the reminders list, from either a roadmap item or a manual reminder. */
+export interface ReminderView {
+  id: string;
+  source: "roadmap" | "manual";
+  title: string;
+  amount: number;
+  currency: CurrencyCode;
+  due_date: string;
+  recurring: "monthly" | null;
+  /** Roadmap item to pay, when there is one */
+  itemId?: string;
+}

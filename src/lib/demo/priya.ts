@@ -1,4 +1,4 @@
-import type { Activity, CircleMember, MoveProfile, RoadmapItem } from "../types";
+import type { Activity, CircleMember, ManualReminder, MoveProfile, RoadmapItem } from "../types";
 import { countryByCode } from "../countries";
 
 /**
@@ -149,4 +149,9 @@ export const PRIYA_CIRCLE: CircleMember[] = [
 export const PRIYA_ACTIVITY: Activity[] = [
   { id: "a1", memberId: "priya", text: "Paid the visa fee", at: new Date(Date.now() - 21 * 864e5).toISOString(), kind: "payment" },
   { id: "a2", memberId: "amma", text: "Joined Priya's Circle", at: new Date(Date.now() - 3 * 864e5).toISOString(), kind: "milestone" },
+];
+
+export const PRIYA_REMINDERS = (): ManualReminder[] => [
+  { id: "r-phone", title: "Phone plan (Wise eSIM)", amount: 10, currency: "GBP", due_date: iso(2), recurring: "monthly" },
+  { id: "r-gym", title: "Student gym membership", amount: 18, currency: "GBP", due_date: iso(19), recurring: "monthly" },
 ];

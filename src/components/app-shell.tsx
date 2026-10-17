@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Bell, FileUp, Map, Users, Wallet } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { t } from "@/lib/i18n";
+import { ReminderPopup } from "@/components/reminder-popup";
 
 const TABS = [
   { href: "/roadmap", key: "nav.home", icon: Map },
@@ -24,6 +25,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="mx-auto min-h-dvh max-w-2xl">
       <main className={clsx("px-4 pt-[calc(env(safe-area-inset-top)+1.25rem)]", showNav ? "pb-28" : "pb-10")}>{children}</main>
+      {showNav && path !== "/reminders" && <ReminderPopup />}
       {showNav && (
         <nav
           aria-label="Main"
