@@ -8,6 +8,7 @@ import { useFx } from "@/lib/useFx";
 import { formatMoney } from "@/lib/countries";
 import { dueLabel } from "@/lib/roadmap";
 import { getPaymentsService } from "@/lib/services/payments";
+import { shareToCircle } from "@/lib/circle-client";
 import type { Transfer } from "@/lib/types";
 
 export default function PayItemPage({ params }: { params: Promise<{ id: string }> }) {
@@ -51,6 +52,7 @@ export default function PayItemPage({ params }: { params: Promise<{ id: string }
       const done = await getPaymentsService().confirmTransfer(draft);
       markPaid(item!.id);
       setSent(done);
+      shareToCircle("payment", `paid the ${item!.title.toLowerCase()} (${formatMoney(item!.amount, item!.currency)})`);
     } catch (err) {
       setError((err as Error).message || "The transfer didn't go through. Nothing was sent.");
     } finally {
@@ -70,7 +72,7 @@ export default function PayItemPage({ params }: { params: Promise<{ id: string }
             {formatMoney(q.targetAmount, q.targetCurrency)} to {item.payee}
             {item.reference && <> with reference <strong className="text-ink">{item.reference}</strong></>}. {q.estimatedDelivery}.
           </p>
-          <p className="text-sm text-muted">Your Circle has been told it&apos;s paid.</p>
+          <p className="text-sm text-muted">If you&apos;re sharing with your Circle, they&apos;ll see it&apos;s paid.</p>
         </Card>
         <ButtonLink href="/roadmap">Back to roadmap</ButtonLink>
       </div>
