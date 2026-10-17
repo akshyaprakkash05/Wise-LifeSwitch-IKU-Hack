@@ -21,6 +21,10 @@ export const DOCS: Record<DocKind, { name: string; file: string }> = {
   invoice: { name: "Fee invoice", file: "Fee_Invoice_2026-27.pdf" },
 };
 
+/** Bank details from Tara's documents (fictional). Scam Shield compares new requests against these. */
+export const NORTHFIELD_BANK = { account_name: "Northfield Student Living", sort_code: "20-32-06", account_number: "53014471" };
+export const UNIVERSITY_BANK = { account_name: "University fees office", sort_code: "40-11-60", account_number: "31929025" };
+
 export const ROADMAP: RoadmapItem[] = [
   {
     id: "hold",
@@ -28,6 +32,7 @@ export const ROADMAP: RoadmapItem[] = [
     payee: "Northfield Student Living",
     payeeShort: "Northfield",
     account: "•• 4471",
+    bank: NORTHFIELD_BANK,
     amountGbp: 200,
     due: "2026-07-12",
     dueLabel: "12 July 2026",
@@ -45,6 +50,7 @@ export const ROADMAP: RoadmapItem[] = [
     payee: "University fees office",
     payeeShort: "University",
     account: "•• 9025",
+    bank: UNIVERSITY_BANK,
     amountGbp: 5000,
     due: "2026-08-01",
     dueLabel: "1 August 2026",
@@ -64,6 +70,7 @@ export const ROADMAP: RoadmapItem[] = [
     payee: "Northfield Student Living",
     payeeShort: "Northfield",
     account: "•• 4471",
+    bank: NORTHFIELD_BANK,
     amountGbp: 1150,
     due: "2026-08-15",
     dueLabel: "15 August 2026",
@@ -83,6 +90,7 @@ export const ROADMAP: RoadmapItem[] = [
     payee: "Northfield Student Living",
     payeeShort: "Northfield",
     account: "•• 4471",
+    bank: NORTHFIELD_BANK,
     amountGbp: 950,
     due: "2026-09-01",
     dueLabel: "1 September 2026, then monthly",

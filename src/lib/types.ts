@@ -3,6 +3,21 @@ export type Currency = "GBP" | "USD";
 
 export type DocKind = "offer" | "tenancy" | "invoice";
 
+/** Bank details found on a document. Used by Scam Shield; only the last digits are ever shown. */
+export interface BankDetails {
+  account_name?: string | null;
+  iban?: string | null;
+  bic?: string | null;
+  sort_code?: string | null;
+  account_number?: string | null;
+}
+
+/** A payee the student already trusts, used to spot changed bank details. */
+export interface KnownPayee {
+  name: string;
+  account_fingerprint: string;
+}
+
 /** One payment the AI found in a relocation document. Amounts are stored in GBP (the payee's currency). */
 export interface RoadmapItem {
   id: string;
@@ -32,6 +47,12 @@ export interface RoadmapItem {
   recurring?: boolean;
   /** The document had a problem the user must resolve before paying. */
   flag?: "missing-reference";
+  /** Full bank details from the document (for Scam Shield). */
+  bank?: BankDetails;
+  /** Full text of the document or message, so Scam Shield can read the wording. */
+  sourceText?: string;
+  /** Set on items added from an uploaded document: the upload's id. */
+  uploadId?: string;
 }
 
 export type StatusKey = "done" | "warn" | "up";

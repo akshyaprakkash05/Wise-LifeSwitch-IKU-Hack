@@ -5,6 +5,8 @@ import { INITIAL_PAID, ROADMAP } from "@/lib/demo-data";
 import { translate, type MessageKey } from "@/lib/i18n";
 import { SAMPLE_GBP_USD, alternate, display } from "@/lib/money";
 import type { Currency, FxQuote, Lang, RoadmapItem } from "@/lib/types";
+import { SEED_CUSTOM_REMINDERS } from "@/lib/tabs/samples";
+import type { CustomReminder, Upload } from "@/lib/tabs/types";
 
 interface State {
   lang: Lang;
@@ -19,6 +21,12 @@ interface State {
   reminderOpen: boolean;
   toast: string;
   fx: FxQuote;
+  /** Payments added from documents the student uploaded on the Documents tab. */
+  extraItems: RoadmapItem[];
+  uploads: Upload[];
+  /** Reminders for roadmap items the student switched off. */
+  reminderOff: Record<string, boolean>;
+  customReminders: CustomReminder[];
 }
 
 type Action =
@@ -34,6 +42,13 @@ type Action =
   | { type: "setReminder"; open: boolean }
   | { type: "toast"; message: string }
   | { type: "setFx"; fx: FxQuote }
+  | { type: "addUpload"; upload: Upload; items: RoadmapItem[] }
+  | { type: "removeUpload"; id: string }
+  | { type: "setReference"; id: string; reference: string }
+  | { type: "toggleItemReminder"; id: string }
+  | { type: "addCustomReminder"; reminder: CustomReminder }
+  | { type: "toggleCustomReminder"; id: string }
+  | { type: "removeCustomReminder"; id: string }
   | { type: "reset" };
 
 const initialState: State = {
@@ -48,6 +63,10 @@ const initialState: State = {
   reminderOpen: false,
   toast: "",
   fx: { rate: SAMPLE_GBP_USD, source: "sample", asOf: "" },
+  extraItems: [],
+  uploads: [],
+  reminderOff: {},
+  customReminders: SEED_CUSTOM_REMINDERS,
 };
 
 function reducer(state: State, action: Action): State {
@@ -80,13 +99,31 @@ function reducer(state: State, action: Action): State {
       return { ...state, toast: action.message };
     case "setFx":
       return { ...state, fx: action.fx };
+    case "addUpload":
+      return { ...state, uploads: [action.upload, ...state.uploads], extraItems: [...state.extraItems, ...action.items] };
+    case "removeUpload":
+      // The payments it added stay in the plan; only the document is deleted.
+      return { ...state, uploads: state.uploads.filter((u) => u.id !== action.id) };
+    case "setReference":
+      return { ...state, references: { ...state.references, [action.id]: action.reference } };
+    case "toggleItemReminder":
+      return { ...state, reminderOff: { ...state.reminderOff, [action.id]: !state.reminderOff[action.id] } };
+    case "addCustomReminder":
+      return { ...state, customReminders: [...state.customReminders, action.reminder] };
+    case "toggleCustomReminder":
+      return { ...state, customReminders: state.customReminders.map((r) => (r.id === action.id ? { ...r, enabled: !r.enabled } : r)) };
+    case "removeCustomReminder":
+      return { ...state, customReminders: state.customReminders.filter((r) => r.id !== action.id) };
     case "reset":
       return { ...initialState, fx: state.fx, lang: state.lang, currency: state.currency };
   }
 }
 
 const STORAGE_KEY = "lifeswitch-demo-v1";
-type Saved = Pick<State, "lang" | "currency" | "paid" | "references" | "reminderBanner">;
+type Saved = Pick<
+  State,
+  "lang" | "currency" | "paid" | "references" | "reminderBanner" | "extraItems" | "uploads" | "reminderOff" | "customReminders"
+>;
 
 interface AppContextValue {
   state: State;
@@ -126,13 +163,20 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       paid: state.paid,
       references: state.references,
       reminderBanner: state.reminderBanner,
+      extraItems: state.extraItems,
+      uploads: state.uploads,
+      reminderOff: state.reminderOff,
+      customReminders: state.customReminders,
     };
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
     } catch {
       /* ignore */
     }
-  }, [state.lang, state.currency, state.paid, state.references, state.reminderBanner]);
+  }, [
+    state.lang, state.currency, state.paid, state.references, state.reminderBanner,
+    state.extraItems, state.uploads, state.reminderOff, state.customReminders,
+  ]);
 
   // Live GBP→USD rate from our API route (falls back to a labelled sample).
   useEffect(() => {
@@ -163,7 +207,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     return {
       state,
       dispatch,
-      items: ROADMAP,
+      items: state.extraItems.length ? [...ROADMAP, ...state.extraItems] : ROADMAP,
       t: (key, vars) => translate(state.lang, key, vars),
       money: (gbp, decimals = 0) => display(gbp, state.currency, rate, decimals),
       moneyAlt: (gbp, decimals = 0) => alternate(gbp, state.currency, rate, decimals),

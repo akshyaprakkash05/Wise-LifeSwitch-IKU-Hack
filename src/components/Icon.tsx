@@ -3,6 +3,19 @@ const PATHS = {
   check: <path d="m5 12 5 5 9-10" />,
   x: <path d="M6 6l12 12M18 6 6 18" />,
   plus: <path d="M12 5v14M5 12h14" />,
+  upload: <path d="M12 15V4m-5 5 5-5 5 5M5 20h14" />,
+  home: (
+    <>
+      <path d="M3 11 12 4l9 7" />
+      <path d="M5 10v10h14V10M10 20v-6h4v6" />
+    </>
+  ),
+  cap: (
+    <>
+      <path d="M2 9 12 4l10 5-10 5z" />
+      <path d="M6 11v5c3 2 9 2 12 0v-5" />
+    </>
+  ),
   route: (
     <>
       <circle cx="6" cy="19" r="2" />
