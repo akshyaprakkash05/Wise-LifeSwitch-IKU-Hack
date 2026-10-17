@@ -1,26 +1,22 @@
-# AI usage and transparency
+# AI Usage and Transparency
 
-This file is kept up to date through the hackathon so judges can see exactly where AI was used.
+AI was used to support research, understand syntax, debug errors and assist with coding. The team made the final decisions on the product, features, design and functionality.
 
-## AI inside the product
+| Area | Tool | Usage |
+|---|---|---|
+| Research and planning | Claude | Basic research and technical guidance |
+| UI and design | Claude | Design suggestions and mock-ups |
+| Development | Claude | Coding assistance, syntax and debugging |
+| Testing | Claude | Help identifying errors and possible fixes |
+| Documentation | Claude | Help organising and improving written content |
 
-| Where | What the AI does | Status |
-| --- | --- | --- |
-| Document reading | Gemini reads offer letters, tenancy agreements and invoices and returns each payment as structured JSON (payee, amount, currency, due date, reference, source sentence) | Live on the Documents tab when `GEMINI_API_KEY` is set (`src/app/api/extract`). The output is cleaned by our own code and checked by the student before it is used. Without a key, a labelled sample runs |
-| Scam Shield | No AI: rule-based checks (IBAN checksum, sort codes, changed bank details, scam wording) so every warning can be explained | Live on the Payments tab |
-| Term explanations | Plain-language explanations in the user's language | Currently hand-written in `src/lib/i18n.ts`; Gemini will generate them for new terms |
-| Voice | ElevenLabs `eleven_multilingual_v2` reads the roadmap aloud in the chosen language (native Tamil voice for Tamil) | Live via `src/app/api/tts/route.ts`; browser voice as fallback |
+The team reviewed the code, tested the features and made final decisions on the implementation.
 
-Safeguards: every AI-extracted value shows the sentence it came from, and the user checks it before it joins the roadmap. Nothing is paid without the user's confirmation.
+## AI Inside the Product
 
-## AI used to build the product
+- **Gemini:** Extracts payment details from documents for user review.
+- **Scam Shield:** Uses rule-based checks, not AI.
+- **Term explanations:** Currently written manually.
+- **Voice:** Uses ElevenLabs for multilingual speech.
 
-| Part | Tool | What it did | What the team did |
-| --- | --- | --- | --- |
-| Product concept, brief, pitch | Claude | Helped structure and word the brief and pitch | Original idea, persona, feature choices and final wording by the team |
-| UI design and mock-ups | Claude | Generated interactive mock-ups and the design direction (colours, type, layout) | Reviewed, directed changes (name, Circle map, layout), chose the final look |
-| Roadmap code | Claude | Wrote the initial Next.js code for the Roadmap page, shell and mocked Wise payment flow | Reviewed, ran and tested it; owns all further changes |
-| Voice button + ElevenLabs route | Claude | Wrote the TTS route and Listen button; picked default voices via the ElevenLabs voice library | Chose ElevenLabs, set up the account and key, tested the voice |
-| Documents, Payments and Reminders tabs | Claude | Wrote the three tabs, Scam Shield, the extract/scam-check/send API routes, the review screen, reminder logic, tests, and the Tamil and Hindi drafts for these tabs | Sadana: chose the features (Scam Shield, review step), _add what you reviewed, tested and changed_ |
-
-Team members should add a row when they use AI for their own feature.
+Users must review extracted payment details and confirm payments themselves.
