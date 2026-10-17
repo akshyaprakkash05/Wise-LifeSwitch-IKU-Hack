@@ -82,4 +82,4 @@ src/
 3. Reuse the tokens and classes in `globals.css` so everything matches.
 4. Commit small and often.
 
-See [AI_USAGE.md](AI_USAGE.md) for how AI was used in this project.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full team workflow and [AI_USAGE.md](AI_USAGE.md) for how AI was used in this project.

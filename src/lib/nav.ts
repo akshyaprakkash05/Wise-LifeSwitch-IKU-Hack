@@ -9,10 +9,12 @@ export interface NavItem {
   breakBefore?: boolean;
   /** Short description used on pages that aren't built yet. */
   blurb: string;
+  /** Set to true when the real page exists in src/app/<route>/page.tsx (removes the "Coming next" placeholder). */
+  live?: boolean;
 }
 
 export const NAV: NavItem[] = [
-  { href: "/", label: "nav_home", icon: "route", blurb: "Your money roadmap." },
+  { href: "/", label: "nav_home", icon: "route", blurb: "Your money roadmap.", live: true },
   { href: "/setup", label: "nav_setup", icon: "compass", blurb: "Origin, destination, purpose and language in under a minute." },
   { href: "/documents", label: "nav_docs", icon: "doc", breakBefore: true, blurb: "Drop in any relocation document. AI finds every payment, and you check each one." },
   { href: "/payments", label: "nav_pay", icon: "swap", blurb: "Every payment is prepared for you. Nothing is sent until you confirm." },

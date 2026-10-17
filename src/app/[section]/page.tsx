@@ -7,7 +7,7 @@ import { ComingNextTitle } from "./title";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return NAV.filter((n) => n.href !== "/").map((n) => ({ section: n.href.slice(1) }));
+  return NAV.filter((n) => !n.live).map((n) => ({ section: n.href.slice(1) }));
 }
 
 export default async function SectionPage({ params }: { params: Promise<{ section: string }> }) {
