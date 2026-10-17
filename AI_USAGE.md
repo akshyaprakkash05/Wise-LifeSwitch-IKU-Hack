@@ -19,6 +19,6 @@ Safeguards: every AI-extracted value shows the sentence it came from, and the us
 | Product concept, brief, pitch | Claude | Helped structure and word the brief and pitch | Original idea, persona, feature choices and final wording by the team |
 | UI design and mock-ups | Claude | Generated interactive mock-ups and the design direction (colours, type, layout) | Reviewed, directed changes (name, Circle map, layout), chose the final look |
 | Roadmap code | Claude | Wrote the initial Next.js code for the Roadmap page, shell and mocked Wise payment flow | Reviewed, ran and tested it; owns all further changes |
+| Voice button + ElevenLabs route | Claude | Wrote the TTS route and Listen button; picked default voices via the ElevenLabs voice library | Chose ElevenLabs, set up the account and key, tested the voice |
 
 Team members should add a row when they use AI for their own feature.
-| Voice button + ElevenLabs route | Claude | Wrote the TTS route and Listen button; picked default voices via the ElevenLabs voice library | Chose ElevenLabs, set up the account and key, tested the voice |
