@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { Loader2, MapPin, Phone, Send, Share2, Video } from "lucide-react";
-import { Avatar, Button, Card, Eyebrow, PageHeader, Pill } from "@/components/ui";
+import { Loader2, MapPin, Phone, Receipt, Send, Share2, Video } from "lucide-react";
+import { Avatar, Button, ButtonLink, Card, Eyebrow, PageHeader, Pill } from "@/components/ui";
 import { CirclePersonForm } from "@/components/circle-person-form";
 import { circleApi, useCircleFeed, useMembership, type CircleFeed, type Membership } from "@/lib/circle-client";
 import { useStore } from "@/lib/store";
@@ -88,6 +88,8 @@ function CircleView({ membership, onLeave }: { membership: Membership; onLeave: 
   return (
     <div className="grid gap-5">
       <PageHeader eyebrow="LifeSwitch Circle" title={feed.circle.name} action={<InviteButton code={feed.circle.code} />} />
+
+      <ButtonLink href="/split" variant="ghost" className="justify-self-start"><Receipt size={18} aria-hidden /> Split a bill with the Circle</ButtonLink>
 
       <Members feed={feed} meId={membership.memberId} />
 

@@ -65,3 +65,16 @@ h1, h2, h3 {
 @media (prefers-reduced-motion: no-preference) {
   .animate-rise { animation: rise 0.35s ease-out both; }
 }
+
+/* Apple's own Apple Pay button (Safari draws it). */
+@supports (-webkit-appearance: -apple-pay-button) {
+  .apple-pay-button {
+    -webkit-appearance: -apple-pay-button;
+    -apple-pay-button-type: pay;
+    -apple-pay-button-style: black;
+  }
+}
+@supports not (-webkit-appearance: -apple-pay-button) {
+  .apple-pay-button { background: #000; }
+  .apple-pay-button::after { content: "Pay with Apple Pay"; color: #fff; font-weight: 600; }
+}
