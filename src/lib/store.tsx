@@ -24,7 +24,8 @@ interface Store extends State {
   setProfile: (p: MoveProfile) => void;
   loadDemo: () => void;
   reset: () => void;
-  addExtracted: (items: ExtractedItem[], doc: { id: string; name: string }) => RoadmapItem[];
+  /** Adds AI-extracted items. Pass reviewed: true once the user has checked them on the review screen. */
+  addExtracted: (items: ExtractedItem[], doc: { id: string; name: string }, opts?: { reviewed?: boolean }) => RoadmapItem[];
   updateItem: (id: string, patch: Partial<RoadmapItem>) => void;
   removeItem: (id: string) => void;
   markPaid: (id: string) => void;
@@ -76,15 +77,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const reset = useCallback(() => setState(EMPTY), []);
 
-  const addExtracted = useCallback((extracted: ExtractedItem[], doc: { id: string; name: string }) => {
+  const addExtracted = useCallback((extracted: ExtractedItem[], doc: { id: string; name: string }, opts?: { reviewed?: boolean }) => {
     const created: RoadmapItem[] = extracted.map((e) => ({
       ...e,
       id: uid(),
       document_id: doc.id,
       document_name: doc.name,
       status: "todo",
-      reviewed: false,
-      recurring: null,
+      reviewed: opts?.reviewed ?? false,
+      recurring: e.category === "housing" && /month/i.test(e.source_snippet) ? "monthly" : null,
     }));
     setState((s) => ({ ...s, items: [...s.items, ...created] }));
     return created;
