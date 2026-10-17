@@ -4,7 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useReducer,
 import { INITIAL_PAID, ROADMAP } from "@/lib/demo-data";
 import { translate, type MessageKey } from "@/lib/i18n";
 import { SAMPLE_GBP_USD, alternate, display } from "@/lib/money";
-import type { Currency, FxQuote, Lang, RoadmapItem } from "@/lib/types";
+import { DEFAULT_MOVE, DESTINATIONS, ORIGINS, findCountry, type Country } from "@/lib/places";
+import type { Currency, FxQuote, Lang, Move, RoadmapItem } from "@/lib/types";
 
 interface State {
   lang: Lang;
@@ -19,6 +20,7 @@ interface State {
   reminderOpen: boolean;
   toast: string;
   fx: FxQuote;
+  move: Move;
 }
 
 type Action =
@@ -34,6 +36,7 @@ type Action =
   | { type: "setReminder"; open: boolean }
   | { type: "toast"; message: string }
   | { type: "setFx"; fx: FxQuote }
+  | { type: "setMove"; move: Move }
   | { type: "reset" };
 
 const initialState: State = {
@@ -48,6 +51,7 @@ const initialState: State = {
   reminderOpen: false,
   toast: "",
   fx: { rate: SAMPLE_GBP_USD, source: "sample", asOf: "" },
+  move: DEFAULT_MOVE,
 };
 
 function reducer(state: State, action: Action): State {
@@ -80,13 +84,15 @@ function reducer(state: State, action: Action): State {
       return { ...state, toast: action.message };
     case "setFx":
       return { ...state, fx: action.fx };
+    case "setMove":
+      return { ...state, move: action.move };
     case "reset":
       return { ...initialState, fx: state.fx, lang: state.lang, currency: state.currency };
   }
 }
 
 const STORAGE_KEY = "lifeswitch-demo-v1";
-type Saved = Pick<State, "lang" | "currency" | "paid" | "references" | "reminderBanner">;
+type Saved = Pick<State, "lang" | "currency" | "paid" | "references" | "reminderBanner" | "move">;
 
 interface AppContextValue {
   state: State;
@@ -98,6 +104,8 @@ interface AppContextValue {
   /** Same amount in the other currency, for the "≈" line. */
   moneyAlt: (amountGbp: number, decimals?: number) => string;
   notify: (message: string) => void;
+  /** The move resolved to cities and airport codes, for the boarding pass and top bar. */
+  trip: { from: Country; to: Country; purpose: Move["purpose"]; course: string };
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -126,13 +134,14 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       paid: state.paid,
       references: state.references,
       reminderBanner: state.reminderBanner,
+      move: state.move,
     };
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
     } catch {
       /* ignore */
     }
-  }, [state.lang, state.currency, state.paid, state.references, state.reminderBanner]);
+  }, [state.lang, state.currency, state.paid, state.references, state.reminderBanner, state.move]);
 
   // Live GBP→USD rate from our API route (falls back to a labelled sample).
   useEffect(() => {
@@ -168,6 +177,12 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       money: (gbp, decimals = 0) => display(gbp, state.currency, rate, decimals),
       moneyAlt: (gbp, decimals = 0) => alternate(gbp, state.currency, rate, decimals),
       notify,
+      trip: {
+        from: findCountry(ORIGINS, state.move.from),
+        to: findCountry(DESTINATIONS, state.move.to),
+        purpose: state.move.purpose,
+        course: state.move.course,
+      },
     };
   }, [state, notify]);
 

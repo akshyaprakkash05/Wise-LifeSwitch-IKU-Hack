@@ -29,6 +29,8 @@ const en = {
   newWords: "New words? Tap one.",
   listen: "Listen",
   addDoc: "Add document",
+  setupSub: "Tell us about your move. It takes under a minute.",
+  buildPlan: "Build my plan",
 };
 export type MessageKey = keyof typeof en;
 
@@ -39,35 +41,35 @@ const MESSAGES: Record<Lang, Partial<Record<MessageKey, string>>> = {
     nav_circle: "வட்டம்", nav_split: "பில் பகிர்வு", nav_shield: "மோசடி கவசம்", nav_care: "கேர் கார்டு",
     greet: "வணக்கம்", sorted: "உங்கள் பயணம் {p}% தயார்.", next: "அடுத்தது", payWise: "Wise மூலம் செலுத்து",
     roadmap: "உங்கள் பண வரைபடம்", budget: "முதல் பருவ பட்ஜெட்", progress: "முன்னேற்றம்",
-    newWords: "புதிய சொற்களா? ஒன்றைத் தட்டவும்.", listen: "கேளுங்கள்", addDoc: "ஆவணம் சேர்",
+    newWords: "புதிய சொற்களா? ஒன்றைத் தட்டவும்.", listen: "கேளுங்கள்", addDoc: "ஆவணம் சேர்", setupSub: "உங்கள் இடமாற்றம் பற்றிச் சொல்லுங்கள். ஒரு நிமிடம் கூட ஆகாது.", buildPlan: "எனது திட்டத்தை உருவாக்கு",
   },
   hi: {
     nav_home: "रोडमैप", nav_setup: "मूव सेट करें", nav_docs: "दस्तावेज़", nav_pay: "भुगतान", nav_rem: "रिमाइंडर",
     nav_circle: "सर्कल", nav_split: "ग्रुप स्प्लिट", nav_shield: "स्कैम शील्ड", nav_care: "केयर कार्ड",
     greet: "नमस्ते", sorted: "आपका मूव {p}% तैयार है।", next: "अगला", payWise: "Wise से भुगतान करें",
     roadmap: "आपका मनी रोडमैप", budget: "पहले टर्म का बजट", progress: "प्रगति",
-    newWords: "नए शब्द? किसी एक पर टैप करें।", listen: "सुनें", addDoc: "दस्तावेज़ जोड़ें",
+    newWords: "नए शब्द? किसी एक पर टैप करें।", listen: "सुनें", addDoc: "दस्तावेज़ जोड़ें", setupSub: "अपने मूव के बारे में बताइए। एक मिनट से भी कम लगेगा।", buildPlan: "मेरा प्लान बनाएँ",
   },
   es: {
     nav_home: "Hoja de ruta", nav_setup: "Configurar mudanza", nav_docs: "Documentos", nav_pay: "Pagos", nav_rem: "Recordatorios",
     nav_circle: "Círculo", nav_split: "Dividir gastos", nav_shield: "Escudo antifraude", nav_care: "Tarjeta Care",
     greet: "Hola", sorted: "Tu mudanza está {p}% lista.", next: "Lo siguiente", payWise: "Pagar con Wise",
     roadmap: "Tu hoja de ruta financiera", budget: "Presupuesto del primer trimestre", progress: "Progreso",
-    newWords: "¿Palabras nuevas? Toca una.", listen: "Escuchar", addDoc: "Añadir documento",
+    newWords: "¿Palabras nuevas? Toca una.", listen: "Escuchar", addDoc: "Añadir documento", setupSub: "Cuéntanos sobre tu mudanza. Tarda menos de un minuto.", buildPlan: "Crear mi plan",
   },
   fr: {
     nav_home: "Feuille de route", nav_setup: "Préparer le départ", nav_docs: "Documents", nav_pay: "Paiements", nav_rem: "Rappels",
     nav_circle: "Cercle", nav_split: "Partager l’addition", nav_shield: "Bouclier anti-arnaque", nav_care: "Carte Care",
     greet: "Bonjour", sorted: "Votre départ est prêt à {p} %.", next: "À venir", payWise: "Payer avec Wise",
     roadmap: "Votre feuille de route financière", budget: "Budget du premier trimestre", progress: "Progression",
-    newWords: "Nouveaux mots ? Touchez-en un.", listen: "Écouter", addDoc: "Ajouter un document",
+    newWords: "Nouveaux mots ? Touchez-en un.", listen: "Écouter", addDoc: "Ajouter un document", setupSub: "Parlez-nous de votre départ. Cela prend moins d’une minute.", buildPlan: "Créer mon plan",
   },
   zh: {
     nav_home: "路线图", nav_setup: "设置搬迁", nav_docs: "文件", nav_pay: "付款", nav_rem: "提醒",
     nav_circle: "家人圈", nav_split: "分账", nav_shield: "防诈骗", nav_care: "关爱卡",
     greet: "你好", sorted: "你的搬迁已完成 {p}%。", next: "下一项", payWise: "用 Wise 支付",
     roadmap: "你的资金路线图", budget: "第一学期预算", progress: "进度",
-    newWords: "有生词？点一下。", listen: "收听", addDoc: "添加文件",
+    newWords: "有生词？点一下。", listen: "收听", addDoc: "添加文件", setupSub: "告诉我们你的搬迁计划，不到一分钟。", buildPlan: "生成我的计划",
   },
 };
 

@@ -56,3 +56,12 @@ export interface FxQuote {
   source: "live" | "sample";
   asOf: string;
 }
+
+/** The move the user set up: where from, where to, why. */
+export interface Move {
+  from: string;
+  to: string;
+  purpose: "Study" | "Work" | "Family";
+  /** Course or job, optional. */
+  course: string;
+}

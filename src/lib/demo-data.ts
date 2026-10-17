@@ -9,10 +9,6 @@ export const DEMO_TODAY = "2026-07-28";
 export const PERSON = {
   name: "Tara",
   fullName: "Tara S.",
-  course: "Computer Science",
-  from: { country: "India", city: "Chennai", code: "MAA" },
-  to: { country: "United Kingdom", city: "London", code: "LHR" },
-  purpose: "Study",
 } as const;
 
 export const DOCS: Record<DocKind, { name: string; file: string }> = {

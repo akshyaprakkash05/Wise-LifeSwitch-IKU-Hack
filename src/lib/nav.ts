@@ -15,7 +15,7 @@ export interface NavItem {
 
 export const NAV: NavItem[] = [
   { href: "/", label: "nav_home", icon: "route", blurb: "Your money roadmap.", live: true },
-  { href: "/setup", label: "nav_setup", icon: "compass", blurb: "Origin, destination, purpose and language in under a minute." },
+  { href: "/setup", label: "nav_setup", icon: "compass", blurb: "Origin, destination, purpose and language in under a minute.", live: true },
   { href: "/documents", label: "nav_docs", icon: "doc", breakBefore: true, blurb: "Drop in any relocation document. AI finds every payment, and you check each one." },
   { href: "/payments", label: "nav_pay", icon: "swap", blurb: "Every payment is prepared for you. Nothing is sent until you confirm." },
   { href: "/reminders", label: "nav_rem", icon: "bell", blurb: "We remind you before every due date." },
