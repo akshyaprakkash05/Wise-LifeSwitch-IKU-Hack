@@ -16,7 +16,7 @@ LifeSwitch sorts every payment the move demands and keeps your family close whil
 - **Progress ring, first-term budget, LifeSwitch Circle feed** that updates when a payment is made.
 - **Rent reminder** pop-up with one-tap Pay with Wise.
 - **Language dropdown** (English, Tamil, Hindi, Spanish, French, Chinese) and **GBP / USD** toggle.
-- **Listen** button reads the roadmap aloud (browser speech for now).
+- **Listen** button reads the roadmap aloud with **ElevenLabs** (multilingual voice; native Tamil voice in Tamil), falling back to the browser voice if ElevenLabs isn't set up.
 - **Reset demo** in the side menu puts everything back to the start.
 
 The other menu items (Set up move, Documents, Payments, Reminders, Circle, Group Split, Scam Shield, Care Card) open a "Coming next" page for now.
@@ -32,6 +32,14 @@ npm run dev
 
 Then open http://localhost:3000.
 
+### Turn on the ElevenLabs voice
+
+1. Copy `.env.example` to a new file named `.env.local` (same folder as `package.json`).
+2. Put your ElevenLabs API key after `ELEVENLABS_API_KEY=`.
+3. Restart `npm run dev`.
+
+The key stays on your machine: it's only read by the server route `src/app/api/tts/route.ts` and `.env.local` is git-ignored.
+
 Other commands: `npm run build` (production build), `npm run typecheck`.
 
 ## How the code is organised
@@ -43,6 +51,7 @@ src/
     page.tsx              Roadmap (home)
     [section]/page.tsx    "Coming next" pages for the other menu items
     api/fx/route.ts       GBP→USD rate (live public reference rate, falls back to a labelled sample)
+    api/tts/route.ts      ElevenLabs text-to-speech (key stays server-side, cached, rate-limited)
     globals.css           Design tokens and styles (Wise palette + LifeSwitch saffron)
   components/
     AppShell.tsx          Side menu, top bar (language, currency, listen)

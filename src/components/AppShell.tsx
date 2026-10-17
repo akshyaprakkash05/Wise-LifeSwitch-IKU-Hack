@@ -83,25 +83,7 @@ function Rail() {
 }
 
 function TopBar() {
-  const { state, dispatch, t, items, money, notify } = useApp();
-
-  const speak = () => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-      notify("Voice isn’t available in this browser.");
-      return;
-    }
-    const { percent, next } = summarise(items, state.paid);
-    const text = [
-      `${t("greet")}, ${PERSON.name}.`,
-      t("sorted", { p: percent }),
-      next ? `${t("next")}: ${next.title}, ${money(next.amountGbp)}.` : "",
-    ].join(" ");
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = LANGS.find((l) => l.code === state.lang)?.speech ?? "en-GB";
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-    notify("Reading your roadmap aloud.");
-  };
+  const { state, dispatch } = useApp();
 
   return (
     <div className="topbar">
@@ -137,9 +119,6 @@ function TopBar() {
           </button>
         ))}
       </div>
-      <button type="button" className="icon-btn" onClick={speak} aria-label={t("listen")}>
-        <Icon name="speaker" />
-      </button>
       <span className="avatar" aria-label={PERSON.name}>
         {PERSON.name[0]}
       </span>

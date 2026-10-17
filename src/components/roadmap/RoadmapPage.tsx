@@ -5,6 +5,7 @@ import { PERSON } from "@/lib/demo-data";
 import { summarise } from "@/lib/roadmap";
 import { useApp } from "@/state/app-state";
 import { Icon } from "../Icon";
+import { VoiceButton } from "../VoiceButton";
 import { BoardingPass } from "./BoardingPass";
 import { BudgetCard } from "./BudgetCard";
 import { CircleCard } from "./CircleCard";
@@ -25,10 +26,13 @@ export function RoadmapPage() {
           <br />
           <span style={{ color: "var(--muted)", fontWeight: 700 }}>{t("sorted", { p: summary.percent })}</span>
         </h1>
-        <Link href="/documents" className="btn ink">
-          <Icon name="plus" size={18} stroke={2.4} />
-          {t("addDoc")}
-        </Link>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }}>
+          <VoiceButton />
+          <Link href="/documents" className="btn ink">
+            <Icon name="plus" size={18} stroke={2.4} />
+            {t("addDoc")}
+          </Link>
+        </div>
       </div>
 
       <ReminderBanner />
