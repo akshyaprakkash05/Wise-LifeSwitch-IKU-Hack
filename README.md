@@ -21,6 +21,14 @@ LifeSwitch sorts every payment the move demands and keeps your family close whil
 
 The other menu items (Set up move, Documents, Payments, Reminders, Circle, Group Split, Scam Shield, Care Card) open a "Coming next" page for now.
 
+## Documents, Payments and Reminders (Sadana)
+
+- **Documents**: drag and drop or choose a PDF/photo, or try a built-in sample (a fee invoice, or a fake "new bank details" message). `/api/extract` reads it with Gemini when `GEMINI_API_KEY` is set, otherwise runs the sample (the page says so). AI output is cleaned in `src/lib/tabs/normalize.ts`, then shown on a **review screen** with the sentence it came from. Nothing joins the roadmap until the student checks it, and new payments appear on the Roadmap too.
+- **Payments**: prepared and sent lists, Check → Confirm → Sent. A missing reference blocks Continue. The Confirm step runs **Scam Shield** (IBAN and sort code checks, changed bank details, pressure or secrecy wording, gift card/crypto requests, money mule offers). `/api/payments/send` re-runs every check on the server and refuses a high-risk payment unless the student confirmed they checked.
+- **Reminders**: one per unpaid payment plus the student's own, with on/off switches, an add form with validation, and **Trigger demo reminder**, which jumps to that payment.
+
+Demo tip: click **Reset demo**, then Documents → "Try a 'new bank details' message" → Add → Payments → open it → Continue. Scam Shield catches it.
+
 ## Run it locally
 
 You need [Node.js](https://nodejs.org) 20 or newer.
@@ -40,7 +48,7 @@ Then open http://localhost:3000.
 
 The key stays on your machine: it's only read by the server route `src/app/api/tts/route.ts` and `.env.local` is git-ignored.
 
-Other commands: `npm run build` (production build), `npm run typecheck`.
+Other commands: `npm run build` (production build), `npm run typecheck`, `npm test`.
 
 ## How the code is organised
 
