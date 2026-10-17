@@ -4,7 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useReducer,
 import { INITIAL_PAID, ROADMAP } from "@/lib/demo-data";
 import { translate, type MessageKey } from "@/lib/i18n";
 import { SAMPLE_GBP_USD, alternate, display } from "@/lib/money";
-import type { Currency, FxQuote, Lang, RoadmapItem } from "@/lib/types";
+import { DEFAULT_MOVE, DESTINATIONS, ORIGINS, findCountry, type Country } from "@/lib/places";
+import type { Currency, FxQuote, Lang, Move, RoadmapItem } from "@/lib/types";
 import { SEED_CUSTOM_REMINDERS } from "@/lib/tabs/samples";
 import type { CustomReminder, Upload } from "@/lib/tabs/types";
 
@@ -21,6 +22,7 @@ interface State {
   reminderOpen: boolean;
   toast: string;
   fx: FxQuote;
+  move: Move;
   /** Payments added from documents the student uploaded on the Documents tab. */
   extraItems: RoadmapItem[];
   uploads: Upload[];
@@ -42,6 +44,7 @@ type Action =
   | { type: "setReminder"; open: boolean }
   | { type: "toast"; message: string }
   | { type: "setFx"; fx: FxQuote }
+  | { type: "setMove"; move: Move }
   | { type: "addUpload"; upload: Upload; items: RoadmapItem[] }
   | { type: "removeUpload"; id: string }
   | { type: "setReference"; id: string; reference: string }
@@ -63,6 +66,7 @@ const initialState: State = {
   reminderOpen: false,
   toast: "",
   fx: { rate: SAMPLE_GBP_USD, source: "sample", asOf: "" },
+  move: DEFAULT_MOVE,
   extraItems: [],
   uploads: [],
   reminderOff: {},
@@ -99,6 +103,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, toast: action.message };
     case "setFx":
       return { ...state, fx: action.fx };
+    case "setMove":
+      return { ...state, move: action.move };
     case "addUpload":
       return { ...state, uploads: [action.upload, ...state.uploads], extraItems: [...state.extraItems, ...action.items] };
     case "removeUpload":
@@ -122,7 +128,7 @@ function reducer(state: State, action: Action): State {
 const STORAGE_KEY = "lifeswitch-demo-v1";
 type Saved = Pick<
   State,
-  "lang" | "currency" | "paid" | "references" | "reminderBanner" | "extraItems" | "uploads" | "reminderOff" | "customReminders"
+  "lang" | "currency" | "paid" | "references" | "reminderBanner" | "move" | "extraItems" | "uploads" | "reminderOff" | "customReminders"
 >;
 
 interface AppContextValue {
@@ -135,6 +141,8 @@ interface AppContextValue {
   /** Same amount in the other currency, for the "≈" line. */
   moneyAlt: (amountGbp: number, decimals?: number) => string;
   notify: (message: string) => void;
+  /** The move resolved to cities and airport codes, for the boarding pass and top bar. */
+  trip: { from: Country; to: Country; purpose: Move["purpose"]; course: string };
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -163,6 +171,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       paid: state.paid,
       references: state.references,
       reminderBanner: state.reminderBanner,
+      move: state.move,
       extraItems: state.extraItems,
       uploads: state.uploads,
       reminderOff: state.reminderOff,
@@ -174,7 +183,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       /* ignore */
     }
   }, [
-    state.lang, state.currency, state.paid, state.references, state.reminderBanner,
+    state.lang, state.currency, state.paid, state.references, state.reminderBanner, state.move,
     state.extraItems, state.uploads, state.reminderOff, state.customReminders,
   ]);
 
@@ -212,6 +221,12 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       money: (gbp, decimals = 0) => display(gbp, state.currency, rate, decimals),
       moneyAlt: (gbp, decimals = 0) => alternate(gbp, state.currency, rate, decimals),
       notify,
+      trip: {
+        from: findCountry(ORIGINS, state.move.from),
+        to: findCountry(DESTINATIONS, state.move.to),
+        purpose: state.move.purpose,
+        course: state.move.course,
+      },
     };
   }, [state, notify]);
 

@@ -19,7 +19,14 @@ LifeSwitch sorts every payment the move demands and keeps your family close whil
 - **Listen** button reads the roadmap aloud with **ElevenLabs** (multilingual voice; native Tamil voice in Tamil), falling back to the browser voice if ElevenLabs isn't set up.
 - **Reset demo** in the side menu puts everything back to the start.
 
-The other menu items (Set up move, Documents, Payments, Reminders, Circle, Group Split, Scam Shield, Care Card) open a "Coming next" page for now.
+## Set up move
+
+- Choose where you're moving from and to, why (Study, Work, Family), the app language and your course or job.
+- A live boarding-pass preview updates as you type and shows what LifeSwitch will look for in your documents.
+- Picking the same country twice is blocked with a clear message.
+- **Build my plan** saves the move (kept in this browser) and the Roadmap's boarding pass and top bar update to match.
+
+The other menu items (Documents, Payments, Reminders, Circle, Group Split, Scam Shield, Care Card) open a "Coming next" page for now.
 
 ## Documents, Payments and Reminders (Sadana)
 
@@ -57,6 +64,7 @@ src/
   app/
     layout.tsx            App shell, fonts, state provider
     page.tsx              Roadmap (home)
+    setup/page.tsx        Set up move
     [section]/page.tsx    "Coming next" pages for the other menu items
     api/fx/route.ts       GBP→USD rate (live public reference rate, falls back to a labelled sample)
     api/tts/route.ts      ElevenLabs text-to-speech (key stays server-side, cached, rate-limited)
@@ -64,10 +72,12 @@ src/
   components/
     AppShell.tsx          Side menu, top bar (language, currency, listen)
     roadmap/              Boarding pass, timeline, payment detail, cards, dialogs
+    setup/                Set up move form and live preview
   lib/
     demo-data.ts          Tara's seeded roadmap (replaced by Gemini extraction later)
     i18n.ts               Translations and term explanations
     money.ts              Currency conversion and formatting
+    places.ts             Countries, cities, airport codes and move purposes
     roadmap.ts            Status, progress and due-date logic
     types.ts              Shared types
   services/

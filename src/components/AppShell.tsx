@@ -83,12 +83,12 @@ function Rail() {
 }
 
 function TopBar() {
-  const { state, dispatch } = useApp();
+  const { state, dispatch, trip } = useApp();
 
   return (
     <div className="topbar">
       <span className="crumb">
-        {PERSON.from.code} → {PERSON.to.code} · {PERSON.purpose}
+        {trip.from.code} → {trip.to.code} · {trip.purpose}
       </span>
       <div className="field-inline">
         <label htmlFor="lang-select" aria-label="Language">

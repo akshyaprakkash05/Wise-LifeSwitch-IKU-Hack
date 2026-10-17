@@ -8,7 +8,7 @@ import { Icon } from "../Icon";
 type Summary = ReturnType<typeof summarise>;
 
 export function BoardingPass({ summary }: { summary: Summary }) {
-  const { t, money, moneyAlt, dispatch, items } = useApp();
+  const { t, money, moneyAlt, dispatch, items, trip } = useApp();
   const { next, percent, paidCount } = summary;
   const docsRead = new Set(ROADMAP.map((i) => i.doc)).size;
   const planeLeft = Math.min(92, Math.max(4, percent));
@@ -18,12 +18,12 @@ export function BoardingPass({ summary }: { summary: Summary }) {
       <div className="pass-main">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <span className="eyebrow" style={{ color: "var(--lime)" }}>LifeSwitch boarding pass</span>
-          <span className="pill p-fam">{PERSON.purpose} · {PERSON.to.city}</span>
+          <span className="pill p-fam">{trip.purpose} · {trip.to.city}</span>
         </div>
         <div className="pass-route">
           <div>
-            <div className="code">{PERSON.from.code}</div>
-            <div className="city">{PERSON.from.city}, {PERSON.from.country}</div>
+            <div className="code">{trip.from.code}</div>
+            <div className="city">{trip.from.city}, {trip.from.name}</div>
           </div>
           <div className="flight">
             <svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true">
@@ -34,13 +34,13 @@ export function BoardingPass({ summary }: { summary: Summary }) {
             </span>
           </div>
           <div style={{ textAlign: "right" }}>
-            <div className="code">{PERSON.to.code}</div>
-            <div className="city">{PERSON.to.city}</div>
+            <div className="code">{trip.to.code}</div>
+            <div className="city">{trip.to.city}</div>
           </div>
         </div>
         <div className="pass-fields">
           <div><span>Passenger</span><b>{PERSON.fullName}</b></div>
-          <div><span>Course</span><b>{PERSON.course}</b></div>
+          {trip.course && <div><span>{trip.purpose === "Study" ? "Course" : "Role"}</span><b>{trip.course}</b></div>}
           <div><span>Documents</span><b>{docsRead} read by AI · {Object.keys(DOCS).length - docsRead} to add</b></div>
           <div><span>{t("progress")}</span><b className="num">{percent}% · {paidCount}/{items.length} paid</b></div>
         </div>
@@ -66,7 +66,7 @@ export function BoardingPass({ summary }: { summary: Summary }) {
         ) : (
           <>
             <span className="big">All paid.</span>
-            <b>Welcome to {PERSON.to.city}, {PERSON.name}.</b>
+            <b>Welcome to {trip.to.city}, {PERSON.name}.</b>
           </>
         )}
       </div>
