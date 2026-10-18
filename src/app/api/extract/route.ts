@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { NextResponse } from "next/server";
 import { SAMPLE_FEE_INVOICE, SAMPLE_SCAM_MESSAGE } from "@/lib/tabs/samples";
 import { normalizeItems } from "@/lib/tabs/normalize";
@@ -68,9 +68,11 @@ export async function POST(req: Request) {
     const ai = new GoogleGenAI({ apiKey });
     const data = Buffer.from(await file.arrayBuffer()).toString("base64");
     const response = await ai.models.generateContent({
-      model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+      // gemini-2.5-flash is retired for new keys; the "latest" alias follows Google's current Flash model.
+      model: process.env.GEMINI_MODEL || "gemini-flash-latest",
       contents: [{ role: "user", parts: [{ inlineData: { mimeType: file.type, data } }, { text: PROMPT }] }],
-      config: { responseMimeType: "application/json", temperature: 0 },
+      // Low thinking keeps a document to ~10s instead of ~50s.
+      config: { responseMimeType: "application/json", temperature: 0, thinkingConfig: { thinkingLevel: ThinkingLevel.LOW } },
     });
     const raw = JSON.parse((response.text ?? "").replace(/^```(json)?|```$/g, "").trim()) as Record<string, unknown>;
     const items = normalizeItems(raw.items);
