@@ -36,6 +36,15 @@ The other menu items (Documents, Payments, Reminders, Circle, Group Split, Scam 
 
 Demo tip: click **Reset demo**, then Documents → "Try a 'new bank details' message" → Add → Payments → open it → Continue. Scam Shield catches it.
 
+## Care Card (Sadana)
+
+Safer spending for someone you care for, set up together with them (demo: Joseph's card).
+
+- Daily limit slider, Alert me / Block it, and four shop types to watch (gambling, online marketplaces, cash over £50, phone and doorstep sales).
+- Recent spending is re-checked live against the settings. "Try a card payment" adds a sample payment so you can see an alert happen.
+- Every change shows a note that Joseph can see it. Rules are plain code in `src/lib/care/rules.ts` (no AI), tested in `tests/care.test.ts`.
+- Settings are kept in this browser only (demo data, fictional cardholder).
+
 ## Run it locally
 
 You need [Node.js](https://nodejs.org) 20 or newer.

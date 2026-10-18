@@ -1,0 +1,46 @@
+/* Care Card (Sadana). Built on the tokens and classes in app/globals.css and tabs/tabs.css. */
+
+.care-banner { display: flex; align-items: flex-start; gap: 12px; padding: 14px 18px; border-radius: 16px; background: var(--saffron-soft); color: var(--saffron-ink); }
+.care-banner svg { flex: none; margin-top: 1px; }
+.care-banner b { color: var(--ink); }
+
+.care-cols { display: grid; gap: 18px; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); align-items: start; }
+.care-side, .care-main { display: grid; gap: 18px; min-width: 0; }
+@media (max-width: 900px) { .care-cols { grid-template-columns: minmax(0, 1fr); } }
+
+/* the card itself */
+.care-card { position: relative; overflow: hidden; aspect-ratio: 1.586; border-radius: 20px; background: linear-gradient(140deg, #1d4a06, var(--forest) 60%); color: #fff; padding: 20px; box-shadow: 0 24px 40px -28px rgba(22, 51, 0, 0.9); }
+.care-chip { position: absolute; top: 20px; left: 20px; width: 34px; height: 26px; border-radius: 6px; background: linear-gradient(135deg, #f3dc8c, #c9a646); }
+.care-ring { position: absolute; right: -34%; top: 16%; width: 92%; aspect-ratio: 1; border-radius: 50%; border: 22px solid var(--saffron); opacity: 0.92; }
+.care-brand { position: absolute; top: 20px; right: 20px; font-family: var(--font-display); font-weight: 900; color: var(--lime); font-size: 17px; }
+.care-number { position: absolute; left: 20px; bottom: 50px; letter-spacing: 0.08em; font-size: 14px; font-weight: 700; }
+.care-holder { position: absolute; left: 20px; bottom: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.03em; }
+.care-scheme { position: absolute; right: 20px; bottom: 20px; font-size: 12px; font-weight: 800; }
+
+.care-box { display: grid; gap: 12px; }
+.care-note { font-size: 13px; }
+.care-limit-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+.care-limit-head b { font-size: 26px; }
+
+.care-range { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 999px; cursor: pointer;
+  background: linear-gradient(to right, var(--forest) var(--fill, 20%), var(--line) var(--fill, 20%)); }
+.care-range:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(159, 232, 112, 0.6); }
+.care-range::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--forest); border: 3px solid var(--lime); }
+.care-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--forest); border: 3px solid var(--lime); }
+
+.care-h2 { font-size: 24px; margin-bottom: 6px; }
+.care-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); font-weight: 600; }
+.care-row:last-child { border-bottom: none; }
+.care-row .grow { flex: 1; min-width: 0; }
+
+.care-recent-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.care-spend { display: flex; gap: 12px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.care-spend:last-child { border-bottom: none; }
+.care-spend .text { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.care-spend .text b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.care-spend .text small { font-size: 13px; color: var(--muted); }
+.care-spend .right { display: grid; justify-items: end; gap: 6px; flex: none; }
+.care-spend.fresh { animation: care-in 0.6s ease; }
+@keyframes care-in { from { background: rgba(159, 232, 112, 0.35); } to { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .care-spend.fresh { animation: none; } }
+@media (max-width: 480px) { .care-spend .right .pill { white-space: normal; text-align: right; } }

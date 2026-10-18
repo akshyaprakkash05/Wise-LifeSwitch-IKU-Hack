@@ -22,5 +22,5 @@ export const NAV: NavItem[] = [
   { href: "/circle", label: "nav_circle", icon: "users", breakBefore: true, blurb: "sub_circle", live: true },
   { href: "/split", label: "nav_split", icon: "receipt", blurb: "sub_split", live: true },
   { href: "/shield", label: "nav_shield", icon: "shield", blurb: "sub_shield" },
-  { href: "/care", label: "nav_care", icon: "heart", blurb: "sub_care" },
+  { href: "/care", label: "nav_care", icon: "heart", blurb: "sub_care", live: true },
 ];
