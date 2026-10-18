@@ -21,7 +21,7 @@ export const LANGS: { code: Lang; label: string; speech: string }[] = [
 const MESSAGES: Record<Lang, Messages> = { en, ta, hi, es, fr, zh };
 
 /** Locale used for dates and country names in each language. */
-const LOCALE: Record<Lang, string> = {
+export const LOCALE: Record<Lang, string> = {
   en: "en-GB",
   ta: "ta-IN",
   hi: "hi-IN",

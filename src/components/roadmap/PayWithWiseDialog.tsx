@@ -45,7 +45,7 @@ function PayFlow({ item, onClose }: { item: RoadmapItem; onClose: () => void }) 
       setReceipt(result);
       dispatch({ type: "markPaid", id: item.id, reference: missingRef ? reference : "" });
       setStage("sent");
-      notify(t("sentToast", { title }));
+      notify(state.circleShare.payments ? t("sentToast", { title }) : t("cc_sentPrivate", { title }));
     } catch {
       setError(t("sendFailed"));
       setStage("confirm");
@@ -88,7 +88,7 @@ function PayFlow({ item, onClose }: { item: RoadmapItem; onClose: () => void }) 
             <dt style={{ color: "var(--rail-dim)" }}>{t("recipientGets")}</dt>
             <dd>{format(item.amountGbp, "GBP")}</dd>
             <dt style={{ color: "var(--rail-dim)" }}>{t("circleLabel")}</dt>
-            <dd>{t("circleSees", { title })}</dd>
+            <dd>{state.circleShare.payments ? t("circleSees", { title }) : t("cc_notShared")}</dd>
           </dl>
           <button type="button" className="btn" style={{ justifySelf: "start" }} onClick={onClose}>
             {t("done")}

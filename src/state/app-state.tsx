@@ -8,6 +8,7 @@ import { DEFAULT_MOVE, DESTINATIONS, ORIGINS, findCountry, type Country } from "
 import type { Currency, FxQuote, Lang, Move, RoadmapItem } from "@/lib/types";
 import { SEED_CUSTOM_REMINDERS } from "@/lib/tabs/samples";
 import type { CustomReminder, Upload } from "@/lib/tabs/types";
+import type { ChatLine } from "@/lib/circle/demo";
 
 interface State {
   lang: Lang;
@@ -29,7 +30,14 @@ interface State {
   /** Reminders for roadmap items the student switched off. */
   reminderOff: Record<string, boolean>;
   customReminders: CustomReminder[];
+  /** What the student lets their Circle see. Each is opt-in and can be paused. */
+  circleShare: CircleShare;
+  /** Messages typed into the sample Circle's chat this visit (the real Circle keeps its own in Postgres). */
+  circleChat: ChatLine[];
 }
+
+export type CircleShareKey = "payments" | "arrival" | "reminders" | "location";
+export type CircleShare = Record<CircleShareKey, boolean>;
 
 type Action =
   | { type: "hydrate"; saved: Partial<State> }
@@ -52,6 +60,8 @@ type Action =
   | { type: "addCustomReminder"; reminder: CustomReminder }
   | { type: "toggleCustomReminder"; id: string }
   | { type: "removeCustomReminder"; id: string }
+  | { type: "setCircleShare"; key: CircleShareKey; on: boolean }
+  | { type: "addCircleChat"; line: ChatLine }
   | { type: "reset" };
 
 const initialState: State = {
@@ -71,6 +81,8 @@ const initialState: State = {
   uploads: [],
   reminderOff: {},
   customReminders: SEED_CUSTOM_REMINDERS,
+  circleShare: { payments: true, arrival: true, reminders: false, location: true },
+  circleChat: [],
 };
 
 function reducer(state: State, action: Action): State {
@@ -120,6 +132,10 @@ function reducer(state: State, action: Action): State {
       return { ...state, customReminders: state.customReminders.map((r) => (r.id === action.id ? { ...r, enabled: !r.enabled } : r)) };
     case "removeCustomReminder":
       return { ...state, customReminders: state.customReminders.filter((r) => r.id !== action.id) };
+    case "setCircleShare":
+      return { ...state, circleShare: { ...state.circleShare, [action.key]: action.on } };
+    case "addCircleChat":
+      return { ...state, circleChat: [...state.circleChat, action.line] };
     case "reset":
       return { ...initialState, fx: state.fx, lang: state.lang, currency: state.currency };
   }
@@ -128,7 +144,7 @@ function reducer(state: State, action: Action): State {
 const STORAGE_KEY = "lifeswitch-demo-v1";
 type Saved = Pick<
   State,
-  "lang" | "currency" | "paid" | "references" | "reminderBanner" | "move" | "extraItems" | "uploads" | "reminderOff" | "customReminders"
+  "lang" | "currency" | "paid" | "references" | "reminderBanner" | "move" | "extraItems" | "uploads" | "reminderOff" | "customReminders" | "circleShare"
 >;
 
 interface AppContextValue {
@@ -186,6 +202,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       uploads: state.uploads,
       reminderOff: state.reminderOff,
       customReminders: state.customReminders,
+      circleShare: state.circleShare,
     };
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
@@ -194,7 +211,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }
   }, [
     state.lang, state.currency, state.paid, state.references, state.reminderBanner, state.move,
-    state.extraItems, state.uploads, state.reminderOff, state.customReminders,
+    state.extraItems, state.uploads, state.reminderOff, state.customReminders, state.circleShare,
   ]);
 
   // Live GBP→USD rate from our API route (falls back to a labelled sample).
