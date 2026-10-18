@@ -15,7 +15,7 @@ The team reviewed the code, tested the features and made final decisions on the 
 ## AI Inside the Product
 
 - **Gemini:** Extracts payment details from documents for user review.
-- **Scam Shield:** Uses rule-based checks, not AI.
+- **Scam Shield:** The risk verdict uses rule-based checks, not AI. On the Scam Shield page, Gemini only reads who is asking for money and their bank details from a pasted message or screenshot (plain patterns are used if Gemini is unavailable), and the user checks what was read.
 - **Term explanations:** Currently written manually.
 - **Voice:** Uses ElevenLabs for multilingual speech.
 
