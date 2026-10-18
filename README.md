@@ -1,49 +1,73 @@
 # Wise LifeSwitch
 
-**Your payments and your people, in one place.**
-IKU Womxn in STEM Hackathon (17–18 Oct 2026) · Wise track.
+**Your payments and your people, carried for you.**
+IKU Womxn in STEM Hackathon (17–18 Oct 2026) · Wise track · Prompt: Max Ease
 
-When you move abroad, you carry two things that don't fit in a suitcase: your payments and your people.
-LifeSwitch sorts every payment the move demands and keeps your family close while you do it.
+When you move abroad, you carry two things that don't fit in a suitcase: your payments and your people. LifeSwitch carries both for you.
 
-## What's live now: the Roadmap
+## The problem
 
-- **Boarding pass** for the move (Chennai MAA → London LHR). The plane moves as payments are made.
-- **Money roadmap**: every payment found in Tara's documents, sorted by due date, with status pills.
-- **Payment detail**: the exact sentence the AI found it in, the payee and reference, and a warning when something is missing.
-- **Plain-language explanations** of terms like *guarantor* and *CAS*, in the chosen language.
-- **Pay with Wise**: Check → Confirm → Sent. Nothing sends without a ticked confirmation. A missing reference blocks the payment until it's added.
-- **Progress ring, first-term budget, LifeSwitch Circle feed** that updates when a payment is made.
-- **Rent reminder** pop-up with one-tap Pay with Wise.
-- **Language dropdown** (English, Tamil, Hindi, Spanish, French, Chinese) that translates every screen, with dates and country names in each language's own format, and a **GBP / USD** toggle. Quotes from documents stay in their original language.
-- **Listen** button reads the roadmap aloud with **ElevenLabs** (multilingual voice; native Tamil voice in Tamil), falling back to the browser voice if ElevenLabs isn't set up.
-- **Reset demo** in the side menu puts everything back to the start.
+Tara is 18 and moving from Chennai to London to study Computer Science. Before she even lands, she has to pay a room holding fee, a rent deposit, monthly rent and tuition. Every payment is buried in a different document, full of terms like *guarantor* and *CAS*, with its own deadline and reference. It's exactly the moment scammers send "our bank details have changed" emails. Her family wants to help, but from 8,000 km away they can't see what's paid and what isn't.
 
-## Set up move
+## What LifeSwitch does
 
-- Choose where you're moving from and to, why (Study, Work, Family), the app language and your course or job.
-- A live boarding-pass preview updates as you type and shows what LifeSwitch will look for in your documents.
-- Picking the same country twice is blocked with a clear message.
-- **Build my plan** saves the move (kept in this browser) and the Roadmap's boarding pass and top bar update to match.
+LifeSwitch turns the paperwork of a move into one clear plan, pays each item safely with Wise, and keeps family involved without taking control away.
 
-The other menu items (Documents, Payments, Reminders, Circle, Group Split, Scam Shield, Care Card) open a "Coming next" page for now.
+### Payments: from documents to done
 
-## Documents, Payments and Reminders (Sadana)
+- **Set up move.** Choose where you're moving from and to, why, and your language. The app builds your plan around it.
+- **Roadmap.** Every payment of the move in date order, on a boarding pass that fills up as you pay. Unfamiliar terms are explained in plain language.
+- **Documents.** Upload an offer letter, tenancy or invoice, or try a built-in sample. Gemini finds each payment (payee, amount, due date, reference) and shows the exact sentence it came from. The student checks every value on a review screen before anything is added.
+- **Payments.** Each payment is prepared as a Wise transfer: Check, Confirm, Sent. Nothing is sent without confirmation, a missing reference blocks the payment, and the server re-runs every check before sending.
+- **Reminders.** A reminder before every due date, plus the student's own, each one tap away from paying.
 
-- **Documents**: drag and drop or choose a PDF/photo, or try a built-in sample (a fee invoice, or a fake "new bank details" message). `/api/extract` reads it with Gemini when `GEMINI_API_KEY` is set, otherwise runs the sample (the page says so). AI output is cleaned in `src/lib/tabs/normalize.ts`, then shown on a **review screen** with the sentence it came from. Nothing joins the roadmap until the student checks it, and new payments appear on the Roadmap too.
-- **Payments**: prepared and sent lists, Check → Confirm → Sent. A missing reference blocks Continue. The Confirm step runs **Scam Shield** (IBAN and sort code checks, changed bank details, pressure or secrecy wording, gift card/crypto requests, money mule offers). `/api/payments/send` re-runs every check on the server and refuses a high-risk payment unless the student confirmed they checked.
-- **Reminders**: one per unpaid payment plus the student's own, with on/off switches, an add form with validation, and **Trigger demo reminder**, which jumps to that payment.
+### Safety: stopping scams before money leaves
 
-Demo tip: click **Reset demo**, then Documents → "Try a 'new bank details' message" → Add → Payments → open it → Continue. Scam Shield catches it.
+- **Scam Shield in Payments.** Checks bank details (IBAN checksum, sort code and account format), spots changed bank details for a known payee, and flags pressure, secrecy, gift card or crypto wording. A high-risk payment is blocked on the server unless the student confirms they've checked it.
+- **Scam Shield page.** Paste any suspicious message or upload a screenshot. Gemini reads who wants paying, then the same rules give a clear verdict with the risky phrases highlighted and next steps (call your bank, forward scam texts to 7726, report to Action Fraud).
 
-## Care Card (Sadana)
+### People: help without losing control
 
-Safer spending for someone you care for, set up together with them (demo: Joseph's card).
+- **Circle.** A private family group with chat, an invite link and opt-in updates like "Rent paid" (never the amount). Location is shared at city level only and can be paused at any time.
+- **Group Split.** Snap a receipt, tag who had what, and each person pays only their share with Apple Pay (Stripe test mode).
+- **Care Card.** Safer spending for someone you care for, set up together with them. They keep their own card. You choose a daily limit, alert or block, and which shops to watch (gambling, large cash withdrawals, online marketplaces, doorstep sales). Every change is shown to the cardholder.
 
-- Daily limit slider, Alert me / Block it, and four shop types to watch (gambling, online marketplaces, cash over £50, phone and doorstep sales).
-- Recent spending is re-checked live against the settings. "Try a card payment" adds a sample payment so you can see an alert happen.
-- Every change shows a note that Joseph can see it. Rules are plain code in `src/lib/care/rules.ts` (no AI), tested in `tests/care.test.ts`.
-- Settings are kept in this browser only (demo data, fictional cardholder).
+### For everyone
+
+Every screen works in **English, Tamil, Hindi, Spanish, French and Chinese**, amounts show in **GBP or USD**, and the **Listen** button reads the roadmap aloud with ElevenLabs.
+
+## Try the demo in 2 minutes
+
+1. Click **Reset demo** in the side menu.
+2. **Documents** → *Try a "new bank details" message* → check it → **Add**.
+3. **Payments** → open *Rent deposit (new details)* → **Continue**. Scam Shield blocks it.
+4. Pay *Tuition instalment 1* instead: Check, Confirm, Sent.
+5. **Reminders** → **Trigger demo reminder** → **Pay now**.
+6. **Care Card** → **Try a card payment** and watch an alert appear.
+
+## How we kept it safe
+
+- Money never moves without the user's explicit confirmation.
+- Every value AI reads is shown with its source sentence and checked by the user first.
+- Scam Shield and Care Card use plain rules, not AI, so every warning can be explained.
+- Family sharing is opt-in, never shows amounts, and location stays at city level.
+- API keys stay on the server and are never committed.
+- This is a demo: Wise transfers are mocked, Stripe runs in test mode, and all people and bank details are fictional.
+
+## How it's built
+
+Next.js 15, React 19 and TypeScript, styled with Tailwind and a Wise-inspired palette.
+
+| Part | Technology |
+| --- | --- |
+| Reading documents, receipts and messages | Gemini, with output cleaned by our own code and checked by the user |
+| Voice | ElevenLabs multilingual voice, with the browser voice as fallback |
+| Circle and Group Split data | Postgres (Tiger Data) |
+| Apple Pay in Group Split | Stripe (test mode) |
+| Wise transfers | One service file, `src/services/payments.ts`, mocked for the demo and ready to connect to the Wise API |
+| Tests | Vitest, covering payment checks, scam rules, reminders and Care Card |
+
+AI was also used to build the project. See [AI_USAGE.md](AI_USAGE.md) for exactly where and how.
 
 ## Run it locally
 
@@ -54,60 +78,36 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:3000.
+Then open http://localhost:3000. The app runs without any keys, using labelled samples. To turn the live services on, copy `.env.example` to `.env.local`, fill in the keys you have and restart:
 
-### Turn on the ElevenLabs voice
+| Key | Turns on |
+| --- | --- |
+| `GEMINI_API_KEY` | Live document, receipt and message reading |
+| `ELEVENLABS_API_KEY` | The Listen voice |
+| `DATABASE_URL` | Circle and Group Split (tables are created automatically) |
+| `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Apple Pay in Group Split (test mode) |
 
-1. Copy `.env.example` to a new file named `.env.local` (same folder as `package.json`).
-2. Put your ElevenLabs API key after `ELEVENLABS_API_KEY=`.
-3. Restart `npm run dev`.
+Other commands: `npm run build`, `npm run typecheck`, `npm test`.
 
-The key stays on your machine: it's only read by the server route `src/app/api/tts/route.ts` and `.env.local` is git-ignored.
-
-Other commands: `npm run build` (production build), `npm run typecheck`, `npm test`.
-
-## How the code is organised
+## Project structure
 
 ```
 src/
-  app/
-    layout.tsx            App shell, fonts, state provider
-    page.tsx              Roadmap (home)
-    setup/page.tsx        Set up move
-    [section]/page.tsx    "Coming next" pages for the other menu items
-    api/fx/route.ts       GBP→USD rate (live public reference rate, falls back to a labelled sample)
-    api/tts/route.ts      ElevenLabs text-to-speech (key stays server-side, cached, rate-limited)
-    globals.css           Design tokens and styles (Wise palette + LifeSwitch saffron)
-  components/
-    AppShell.tsx          Side menu, top bar (language, currency, listen)
-    roadmap/              Boarding pass, timeline, payment detail, cards, dialogs
-    setup/                Set up move form and live preview
-  lib/
-    demo-data.ts          Tara's seeded roadmap (replaced by Gemini extraction later)
-    i18n.ts               Translation lookup, dates in each language, term explanations
-    messages/             UI text, one file per language (en.ts is the source; the build fails if a language misses a string)
-    money.ts              Currency conversion and formatting
-    places.ts             Countries, cities, airport codes and move purposes
-    roadmap.ts            Status, progress and due-date logic
-    types.ts              Shared types
-  services/
-    payments.ts           The one place that talks to Wise (mocked for the demo)
-  state/
-    app-state.tsx         App state (React context + reducer), saved in the browser
+  app/            One folder per page, plus api/ for server routes
+  components/     roadmap/, setup/, tabs/ (Documents, Payments, Reminders), circle/, split/, shield/, care/
+  lib/            Rules and data: scam/, care/, tabs/, circle/, shield/, messages/ (one file per language)
+  services/       payments.ts, the one place that talks to Wise
+  state/          App state, saved in the browser
+tests/            Automated tests
 ```
 
-### Rules the code follows
+## Team
 
-- Never send money without explicit confirmation.
-- Show the source sentence for every AI-extracted value.
-- Circle sharing is opt-in.
-- Wise-inspired colours; no Wise logo.
+| Who | Built |
+| --- | --- |
+| Akshya | App shell, Roadmap, Set up move, voice, translations, merging |
+| Sadana | Documents, Payments, Reminders, Scam Shield rules, Care Card |
+| Anusha | Circle, Group Split, Scam Shield page |
+| Nessah | Research, slides, Devpost write-up, and the dashboard mock-up with the team |
 
-## Team workflow
-
-1. `git pull` before you start.
-2. Build your feature in its own folder under `src/components/<feature>/` and its page under `src/app/`.
-3. Reuse the tokens and classes in `globals.css` so everything matches.
-4. Commit small and often.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full team workflow and [AI_USAGE.md](AI_USAGE.md) for how AI was used in this project.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how we worked together.
