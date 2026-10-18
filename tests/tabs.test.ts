@@ -22,7 +22,7 @@ describe("Scam Shield", () => {
     }
   });
   it("flags the 'new bank details' message as high risk", () => {
-    const [item] = toRoadmapItems(SAMPLE_SCAM_MESSAGE.items, "u1", "Message", SAMPLE_SCAM_MESSAGE.fullText);
+    const [item] = toRoadmapItems(SAMPLE_SCAM_MESSAGE.items, "u1", SAMPLE_SCAM_MESSAGE.fullText);
     const r = assessPayment(scamInput(item), KNOWN_PAYEES);
     expect(r.level).toBe("high");
     expect(r.signals.map((s) => s.code)).toEqual(expect.arrayContaining(["account_changed", "changed_details", "pressure", "secrecy"]));
@@ -37,12 +37,12 @@ describe("Documents", () => {
     expect(normalizeItems("junk")).toEqual([]);
   });
   it("turns the sample invoice into roadmap items the rest of the app understands", () => {
-    const items = toRoadmapItems(SAMPLE_FEE_INVOICE.items, "u1", "Fee invoice", SAMPLE_FEE_INVOICE.fullText);
+    const items = toRoadmapItems(SAMPLE_FEE_INVOICE.items, "u1", SAMPLE_FEE_INVOICE.fullText);
     expect(items).toHaveLength(2);
-    expect(items[0]).toMatchObject({ id: "u1-0", payeeShort: "University", account: "•• 9025", amountGbp: 8250, dueLabel: "30 September 2026", ready: true });
+    expect(items[0]).toMatchObject({ id: "u1-0", payeeShort: "University", account: "•• 9025", amountGbp: 8250, due: "2026-09-30", ready: true });
   });
   it("marks items without a reference as needing one", () => {
-    const [item] = toRoadmapItems([{ ...SAMPLE_FEE_INVOICE.items[0], reference: null }], "u2", "Fee invoice", "");
+    const [item] = toRoadmapItems([{ ...SAMPLE_FEE_INVOICE.items[0], reference: null }], "u2", "");
     expect(item.flag).toBe("missing-reference");
   });
 });

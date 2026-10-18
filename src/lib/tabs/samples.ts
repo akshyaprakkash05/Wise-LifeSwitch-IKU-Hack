@@ -23,7 +23,7 @@ Pay by bank transfer to University fees office, sort code 40-11-60, account numb
 Quote your student number as the payment reference.`;
 
 export const SAMPLE_FEE_INVOICE: ExtractionResult = {
-  documentTitle: DOCS.invoice.name,
+  documentTitle: "Fee invoice",
   filename: DOCS.invoice.file,
   pages: 2,
   readBy: "sample",

@@ -21,7 +21,7 @@ function iconFor(item: RoadmapItem, paid: boolean): IconName {
 
 export function PaymentsPage() {
   const t = useT();
-  const { items, state, dispatch, money } = useApp();
+  const { items, state, dispatch, money, itemText } = useApp();
   const sorted = useMemo(() => [...items].sort((a, b) => a.due.localeCompare(b.due)), [items]);
   const pending = sorted.filter((i) => !state.paid[i.id]);
   const sent = sorted.filter((i) => state.paid[i.id]);
@@ -73,7 +73,7 @@ export function PaymentsPage() {
         <button type="button" className="pay-row" aria-pressed={active} onClick={() => dispatch({ type: "select", id: item.id })}>
           <span className={`icon-tile${paid ? " soft" : ""}`}><Icon name={iconFor(item, paid)} size={18} /></span>
           <span className="text">
-            <b>{item.title}</b>
+            <b>{itemText(item, "title")}</b>
             <small>{item.payeeShort} · {t("pay.due", { date: shortDate(item.due) })}</small>
           </span>
           <span className="right">
@@ -88,7 +88,7 @@ export function PaymentsPage() {
 
 function Detail({ item }: { item: RoadmapItem }) {
   const t = useT();
-  const { state, dispatch, notify, money } = useApp();
+  const { state, dispatch, notify, money, itemText, fmt } = useApp();
   const paid = !!state.paid[item.id];
   const [stage, setStage] = useState<Stage>(paid ? "sent" : "check");
   const [refDraft, setRefDraft] = useState("");
@@ -131,10 +131,10 @@ function Detail({ item }: { item: RoadmapItem }) {
 
   const header = (
     <div>
-      <span className="eyebrow">{item.title}</span>
+      <span className="eyebrow">{itemText(item, "title")}</span>
       <h2 className="disp" style={{ fontSize: 32, marginTop: 4 }}>{item.payee}</h2>
       <span className="mono muted" style={{ fontSize: 13 }}>
-        {t("pay.ukAccount", { last4: item.account.replace(/[^0-9A-Z]/gi, "") })} · {t("pay.due", { date: item.dueLabel })}
+        {t("pay.ukAccount", { last4: item.account.replace(/[^0-9A-Z]/gi, "") })} · {t("pay.due", { date: fmt.longDate(item.due) })}
       </span>
     </div>
   );

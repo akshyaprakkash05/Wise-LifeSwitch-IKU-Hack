@@ -1,4 +1,12 @@
 import type { Lang } from "./types";
+import { en, type MessageKey, type Messages } from "./messages/en";
+import { es } from "./messages/es";
+import { fr } from "./messages/fr";
+import { hi } from "./messages/hi";
+import { ta } from "./messages/ta";
+import { zh } from "./messages/zh";
+
+export type { MessageKey };
 
 export const LANGS: { code: Lang; label: string; speech: string }[] = [
   { code: "en", label: "English", speech: "en-GB" },
@@ -9,74 +17,59 @@ export const LANGS: { code: Lang; label: string; speech: string }[] = [
   { code: "zh", label: "中文 (Chinese)", speech: "zh-CN" },
 ];
 
-const en = {
-  nav_home: "Roadmap",
-  nav_setup: "Set up move",
-  nav_docs: "Documents",
-  nav_pay: "Payments",
-  nav_rem: "Reminders",
-  nav_circle: "Circle",
-  nav_split: "Group Split",
-  nav_shield: "Scam Shield",
-  nav_care: "Care Card",
-  greet: "Hi",
-  sorted: "Your move is {p}% sorted.",
-  next: "Next up",
-  payWise: "Pay with Wise",
-  roadmap: "Your money roadmap",
-  budget: "First-term budget",
-  progress: "Progress",
-  newWords: "New words? Tap one.",
-  listen: "Listen",
-  addDoc: "Add document",
-  setupSub: "Tell us about your move. It takes under a minute.",
-  buildPlan: "Build my plan",
-};
-export type MessageKey = keyof typeof en;
+/** Every language provides every key: the `Messages` type makes a missing string a build error. */
+const MESSAGES: Record<Lang, Messages> = { en, ta, hi, es, fr, zh };
 
-const MESSAGES: Record<Lang, Partial<Record<MessageKey, string>>> = {
-  en,
-  ta: {
-    nav_home: "பாதை வரைபடம்", nav_setup: "பயணத்தை அமை", nav_docs: "ஆவணங்கள்", nav_pay: "கட்டணங்கள்", nav_rem: "நினைவூட்டல்கள்",
-    nav_circle: "வட்டம்", nav_split: "பில் பகிர்வு", nav_shield: "மோசடி கவசம்", nav_care: "கேர் கார்டு",
-    greet: "வணக்கம்", sorted: "உங்கள் பயணம் {p}% தயார்.", next: "அடுத்தது", payWise: "Wise மூலம் செலுத்து",
-    roadmap: "உங்கள் பண வரைபடம்", budget: "முதல் பருவ பட்ஜெட்", progress: "முன்னேற்றம்",
-    newWords: "புதிய சொற்களா? ஒன்றைத் தட்டவும்.", listen: "கேளுங்கள்", addDoc: "ஆவணம் சேர்", setupSub: "உங்கள் இடமாற்றம் பற்றிச் சொல்லுங்கள். ஒரு நிமிடம் கூட ஆகாது.", buildPlan: "எனது திட்டத்தை உருவாக்கு",
-  },
-  hi: {
-    nav_home: "रोडमैप", nav_setup: "मूव सेट करें", nav_docs: "दस्तावेज़", nav_pay: "भुगतान", nav_rem: "रिमाइंडर",
-    nav_circle: "सर्कल", nav_split: "ग्रुप स्प्लिट", nav_shield: "स्कैम शील्ड", nav_care: "केयर कार्ड",
-    greet: "नमस्ते", sorted: "आपका मूव {p}% तैयार है।", next: "अगला", payWise: "Wise से भुगतान करें",
-    roadmap: "आपका मनी रोडमैप", budget: "पहले टर्म का बजट", progress: "प्रगति",
-    newWords: "नए शब्द? किसी एक पर टैप करें।", listen: "सुनें", addDoc: "दस्तावेज़ जोड़ें", setupSub: "अपने मूव के बारे में बताइए। एक मिनट से भी कम लगेगा।", buildPlan: "मेरा प्लान बनाएँ",
-  },
-  es: {
-    nav_home: "Hoja de ruta", nav_setup: "Configurar mudanza", nav_docs: "Documentos", nav_pay: "Pagos", nav_rem: "Recordatorios",
-    nav_circle: "Círculo", nav_split: "Dividir gastos", nav_shield: "Escudo antifraude", nav_care: "Tarjeta Care",
-    greet: "Hola", sorted: "Tu mudanza está {p}% lista.", next: "Lo siguiente", payWise: "Pagar con Wise",
-    roadmap: "Tu hoja de ruta financiera", budget: "Presupuesto del primer trimestre", progress: "Progreso",
-    newWords: "¿Palabras nuevas? Toca una.", listen: "Escuchar", addDoc: "Añadir documento", setupSub: "Cuéntanos sobre tu mudanza. Tarda menos de un minuto.", buildPlan: "Crear mi plan",
-  },
-  fr: {
-    nav_home: "Feuille de route", nav_setup: "Préparer le départ", nav_docs: "Documents", nav_pay: "Paiements", nav_rem: "Rappels",
-    nav_circle: "Cercle", nav_split: "Partager l’addition", nav_shield: "Bouclier anti-arnaque", nav_care: "Carte Care",
-    greet: "Bonjour", sorted: "Votre départ est prêt à {p} %.", next: "À venir", payWise: "Payer avec Wise",
-    roadmap: "Votre feuille de route financière", budget: "Budget du premier trimestre", progress: "Progression",
-    newWords: "Nouveaux mots ? Touchez-en un.", listen: "Écouter", addDoc: "Ajouter un document", setupSub: "Parlez-nous de votre départ. Cela prend moins d’une minute.", buildPlan: "Créer mon plan",
-  },
-  zh: {
-    nav_home: "路线图", nav_setup: "设置搬迁", nav_docs: "文件", nav_pay: "付款", nav_rem: "提醒",
-    nav_circle: "家人圈", nav_split: "分账", nav_shield: "防诈骗", nav_care: "关爱卡",
-    greet: "你好", sorted: "你的搬迁已完成 {p}%。", next: "下一项", payWise: "用 Wise 支付",
-    roadmap: "你的资金路线图", budget: "第一学期预算", progress: "进度",
-    newWords: "有生词？点一下。", listen: "收听", addDoc: "添加文件", setupSub: "告诉我们你的搬迁计划，不到一分钟。", buildPlan: "生成我的计划",
-  },
+/** Locale used for dates and country names in each language. */
+const LOCALE: Record<Lang, string> = {
+  en: "en-GB",
+  ta: "ta-IN",
+  hi: "hi-IN",
+  es: "es-ES",
+  fr: "fr-FR",
+  zh: "zh-CN",
 };
+
+export function isMessageKey(key: string): key is MessageKey {
+  return key in en;
+}
 
 export function translate(lang: Lang, key: MessageKey, vars?: Record<string, string | number>): string {
-  let text = MESSAGES[lang][key] ?? en[key];
-  if (vars) for (const [k, v] of Object.entries(vars)) text = text.replace(`{${k}}`, String(v));
+  let text = MESSAGES[lang][key] || en[key];
+  if (vars) for (const [k, v] of Object.entries(vars)) text = text.replaceAll(`{${k}}`, String(v));
   return text;
+}
+
+function toDate(isoDate: string): Date {
+  return new Date(isoDate + "T00:00:00Z");
+}
+
+/** "1 September 2026" in English, "2026年9月1日" in Chinese, and so on. */
+export function formatLongDate(lang: Lang, isoDate: string): string {
+  return new Intl.DateTimeFormat(LOCALE[lang], { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(
+    toDate(isoDate),
+  );
+}
+
+/** "1 Sep" style, for compact labels. */
+export function formatShortDate(lang: Lang, isoDate: string): string {
+  return new Intl.DateTimeFormat(LOCALE[lang], { day: "numeric", month: "short", timeZone: "UTC" }).format(toDate(isoDate));
+}
+
+/** Day number and short month name, for the timeline date tiles. */
+export function dayAndMonth(lang: Lang, isoDate: string): { day: string; month: string } {
+  const d = toDate(isoDate);
+  const month = new Intl.DateTimeFormat(LOCALE[lang], { month: "short", timeZone: "UTC" }).format(d).replace(/\.$/, "");
+  return { day: String(d.getUTCDate()), month };
+}
+
+/** Country name in the chosen language, from its ISO region code. */
+export function countryName(lang: Lang, iso: string, fallback: string): string {
+  try {
+    return new Intl.DisplayNames([LOCALE[lang]], { type: "region" }).of(iso) ?? fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 /** Plain-language explanations of terms found in documents. Falls back to English when a translation is missing. */

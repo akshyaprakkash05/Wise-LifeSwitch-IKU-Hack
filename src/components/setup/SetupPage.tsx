@@ -11,9 +11,10 @@ import { Icon } from "../Icon";
 import { MovePreview } from "./MovePreview";
 
 const COURSE_MAX = 60;
+const PLACEHOLDER = { Study: "ph_course", Work: "ph_work", Family: "ph_family" } as const;
 
 export function SetupPage() {
-  const { state, dispatch, t, notify } = useApp();
+  const { state, dispatch, t, notify, fmt } = useApp();
   const router = useRouter();
   const [draft, setDraft] = useState<Move>(state.move);
   const [error, setError] = useState("");
@@ -35,12 +36,12 @@ export function SetupPage() {
   function submit(e: FormEvent) {
     e.preventDefault();
     if (sameCountry) {
-      setError("Choose a destination that’s different from where you’re moving from.");
+      setError(t("sameCountry"));
       return;
     }
     const move: Move = { ...draft, course: draft.course.trim().slice(0, COURSE_MAX) };
     dispatch({ type: "setMove", move });
-    notify(`Plan ready: ${from.city} to ${to.city}. Here’s your money roadmap.`);
+    notify(t("planReady", { from: from.city, to: to.city }));
     router.push("/");
   }
 
@@ -57,15 +58,15 @@ export function SetupPage() {
         <form className="card setup-form" onSubmit={submit} noValidate aria-describedby={error ? errorId : undefined}>
           <div className="setup-grid">
             <label className="flabel" htmlFor="move-from">
-              Moving from
+              {t("movingFrom")}
               <select id="move-from" className="input" value={draft.from} onChange={(e) => update("from", e.target.value)}>
                 {ORIGINS.map((c) => (
-                  <option key={c.name} value={c.name}>{c.name} ({c.city})</option>
+                  <option key={c.name} value={c.name}>{fmt.country(c)} ({c.city})</option>
                 ))}
               </select>
             </label>
             <label className="flabel" htmlFor="move-to">
-              Moving to
+              {t("movingTo")}
               <select
                 id="move-to"
                 className="input"
@@ -74,27 +75,27 @@ export function SetupPage() {
                 aria-invalid={sameCountry}
               >
                 {DESTINATIONS.map((c) => (
-                  <option key={c.name} value={c.name}>{c.name} ({c.city})</option>
+                  <option key={c.name} value={c.name}>{fmt.country(c)} ({c.city})</option>
                 ))}
               </select>
             </label>
           </div>
 
           <fieldset className="choice-group">
-            <legend className="flabel">Why are you moving?</legend>
+            <legend className="flabel">{t("why")}</legend>
             <div className="choices">
               {PURPOSES.map((p) => (
-                <label key={p.value} className="choice">
+                <label key={p} className="choice">
                   <input
                     type="radio"
                     name="purpose"
-                    value={p.value}
-                    checked={draft.purpose === p.value}
-                    onChange={() => update("purpose", p.value)}
+                    value={p}
+                    checked={draft.purpose === p}
+                    onChange={() => update("purpose", p)}
                   />
                   <span>
-                    <b>{p.label}</b>
-                    <small>{p.hint}</small>
+                    <b>{t(`p_${p}`)}</b>
+                    <small>{t(`ph_${p}`)}</small>
                   </span>
                 </label>
               ))}
@@ -103,7 +104,7 @@ export function SetupPage() {
 
           <div className="setup-grid">
             <label className="flabel" htmlFor="move-lang">
-              Language for the app and explanations
+              {t("appLanguage")}
               <select
                 id="move-lang"
                 className="input"
@@ -117,7 +118,7 @@ export function SetupPage() {
             </label>
             <label className="flabel" htmlFor="move-course">
               <span>
-                {draft.purpose === "Study" ? "Course" : "Job or reason"} <span className="muted" style={{ fontWeight: 400 }}>(optional)</span>
+                {t(draft.purpose === "Study" ? "courseLabel" : "jobLabel")} <span className="muted" style={{ fontWeight: 400 }}>{t("optional")}</span>
               </span>
               <input
                 id="move-course"
@@ -125,7 +126,7 @@ export function SetupPage() {
                 value={draft.course}
                 maxLength={COURSE_MAX}
                 onChange={(e) => update("course", e.target.value)}
-                placeholder={draft.purpose === "Study" ? "e.g. Computer Science" : draft.purpose === "Work" ? "e.g. Software engineer" : "e.g. Joining my partner"}
+                placeholder={t(PLACEHOLDER[draft.purpose])}
                 autoComplete="off"
               />
             </label>
@@ -134,7 +135,7 @@ export function SetupPage() {
           {(error || sameCountry) && (
             <div id={errorId} className="banner warn" role="alert">
               <Icon name="alert" size={18} />
-              <span className="grow">{error || "You’ve picked the same country twice. Choose where you’re moving to."}</span>
+              <span className="grow">{error || t("sameCountry")}</span>
             </div>
           )}
 
@@ -144,11 +145,11 @@ export function SetupPage() {
               <Icon name="arrow" size={18} stroke={2.4} />
             </button>
             <span className="muted" style={{ fontSize: 13 }}>
-              {changed ? "Your boarding pass updates when you save." : `Saved for ${PERSON.name}. Change anything and save again.`}
+              {changed ? t("updatesOnSave") : t("savedFor", { name: PERSON.name })}
             </span>
           </div>
           <p className="muted" style={{ fontSize: 12 }}>
-            Only used to build your plan. Nothing is shared with your Circle unless you choose to.
+            {t("privacyNote")}
           </p>
         </form>
 

@@ -26,7 +26,7 @@ const newId = () => `up-${Date.now().toString(36)}-${Math.random().toString(36).
 
 export function DocumentsPage() {
   const t = useT();
-  const { state, dispatch, notify } = useApp();
+  const { state, dispatch, notify, t: tApp } = useApp();
   const [reading, setReading] = useState<string | null>(null);
   const [review, setReview] = useState<Review | null>(null);
   const [error, setError] = useState("");
@@ -36,12 +36,12 @@ export function DocumentsPage() {
   // Documents already in Tara's roadmap, plus anything she uploaded here.
   const rows = useMemo(() => {
     const seeded = (["offer", "tenancy"] as const).map((kind) => ({
-      id: kind, title: DOCS[kind].name, file: DOCS[kind].file, pages: kind === "offer" ? 3 : 12,
+      id: kind, title: tApp(`docName_${kind}`), file: DOCS[kind].file, pages: kind === "offer" ? 3 : 12,
       found: ROADMAP.filter((i) => i.doc === kind).length, removable: false,
     }));
     const uploads = state.uploads.map((u) => ({ id: u.id, title: u.title, file: u.file, pages: u.pages, found: u.found, removable: true }));
     return [...uploads, ...seeded];
-  }, [state.uploads]);
+  }, [state.uploads, tApp]);
 
   async function extract(form: FormData, filename: string) {
     setError("");
@@ -87,7 +87,7 @@ export function DocumentsPage() {
     if (!review) return;
     if (review.items.some((i) => reviewErrors(i).length)) return setReview({ ...review, showErrors: true });
     const id = newId();
-    const items = toRoadmapItems(review.items, id, review.result.documentTitle, review.result.fullText);
+    const items = toRoadmapItems(review.items, id, review.result.fullText);
     dispatch({
       type: "addUpload",
       upload: { id, title: review.result.documentTitle, file: review.result.filename, pages: review.result.pages, found: items.length, readBy: review.result.readBy },

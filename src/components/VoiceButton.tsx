@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { PERSON } from "@/lib/demo-data";
 import { LANGS } from "@/lib/i18n";
-import { dayAndMonth, daysUntil, needsReference, summarise } from "@/lib/roadmap";
+import { daysUntil, needsReference, summarise } from "@/lib/roadmap";
 import { useApp } from "@/state/app-state";
 import { Icon } from "./Icon";
 
@@ -11,7 +11,7 @@ type Status = "idle" | "loading" | "playing";
 
 /** Reads the roadmap aloud with ElevenLabs, falling back to the browser's voice if ElevenLabs isn't available. */
 export function VoiceButton() {
-  const { t, items, state, money, notify } = useApp();
+  const { t, items, state, money, notify, itemText, fmt } = useApp();
   const [status, setStatus] = useState<Status>("idle");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const urlCache = useRef(new Map<string, string>());
@@ -21,17 +21,24 @@ export function VoiceButton() {
   function buildScript(): string {
     const { percent, paidCount, next } = summarise(items, state.paid);
     const parts = [
-      `${t("greet")}, ${PERSON.name}.`,
+      t("greet", { name: PERSON.name }),
       t("sorted", { p: percent }),
-      `You've paid ${paidCount} of ${items.length} payments.`,
+      t("v_paid", { paid: paidCount, total: items.length }),
     ];
     if (next) {
-      const { day, month } = dayAndMonth(next.due);
       const days = daysUntil(next.due);
-      parts.push(`${t("next")}: ${next.title}, ${money(next.amountGbp)}, due ${day} ${month}${days > 0 ? `, in ${days} days` : ""}.`);
+      parts.push(
+        t("v_next", {
+          label: t("next"),
+          title: itemText(next, "title"),
+          amount: money(next.amountGbp),
+          date: fmt.longDate(next.due),
+          days: days > 0 ? t("v_inDays", { n: days }) : "",
+        }),
+      );
     }
     const missing = items.find((i) => !state.paid[i.id] && needsReference(i, state.references));
-    if (missing) parts.push(`Heads up: your ${missing.title.toLowerCase()} has no payment reference yet. Ask ${missing.payeeShort} before you pay.`);
+    if (missing) parts.push(t("v_headsUp", { title: lowerFirst(itemText(missing, "title")), payee: missing.payeeShort }));
     return parts.join(" ");
   }
 
@@ -44,7 +51,7 @@ export function VoiceButton() {
 
   function browserVoice(text: string, reason: string) {
     if (!("speechSynthesis" in window)) {
-      notify("Voice isn’t available in this browser.");
+      notify(t("voiceUnavailable"));
       setStatus("idle");
       return;
     }
@@ -54,7 +61,7 @@ export function VoiceButton() {
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(u);
     setStatus("playing");
-    notify(`Using the browser voice: ${reason}.`);
+    notify(t("voiceFallback", { reason }));
   }
 
   async function play() {
@@ -71,10 +78,7 @@ export function VoiceButton() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text, lang: state.lang }),
         });
-        if (!res.ok) {
-          const info = (await res.json().catch(() => ({}))) as { message?: string };
-          return browserVoice(text, info.message ?? "ElevenLabs isn’t available");
-        }
+        if (!res.ok) return browserVoice(text, t("voiceNotSet"));
         url = URL.createObjectURL(await res.blob());
         urlCache.current.set(cacheKey, url);
       }
@@ -85,11 +89,11 @@ export function VoiceButton() {
       await audio.play();
       setStatus("playing");
     } catch {
-      browserVoice(text, "couldn’t reach the voice service");
+      browserVoice(text, t("voiceOffline"));
     }
   }
 
-  const label = status === "loading" ? "Preparing voice…" : status === "playing" ? "Stop" : t("listen");
+  const label = status === "loading" ? t("preparing") : status === "playing" ? t("stop") : t("listen");
 
   return (
     <button
@@ -97,7 +101,7 @@ export function VoiceButton() {
       className={`voice-btn ${status}`}
       onClick={play}
       aria-pressed={status === "playing"}
-      aria-label={status === "playing" ? "Stop reading" : "Listen to my roadmap"}
+      aria-label={status === "playing" ? t("stopLabel") : t("listenLabel")}
     >
       <span className="voice-ic" aria-hidden="true">
         {status === "loading" ? (
@@ -110,8 +114,13 @@ export function VoiceButton() {
       </span>
       <span className="voice-text">
         <b>{label}</b>
-        {status === "idle" && <small>Your roadmap, read aloud</small>}
+        {status === "idle" && <small>{t("readAloud")}</small>}
       </span>
     </button>
   );
+}
+
+/** "Rent deposit" → "rent deposit" inside a sentence. No effect on scripts without case. */
+function lowerFirst(text: string): string {
+  return text.charAt(0).toLocaleLowerCase() + text.slice(1);
 }

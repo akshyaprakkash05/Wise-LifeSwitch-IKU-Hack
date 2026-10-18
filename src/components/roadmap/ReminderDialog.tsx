@@ -8,7 +8,7 @@ import { Dialog } from "./Dialog";
 
 /** The in-app reminder that pops up three days before a payment is due. */
 export function ReminderDialog() {
-  const { state, items, dispatch, money, moneyAlt, t, notify } = useApp();
+  const { state, items, dispatch, money, moneyAlt, t, notify, fmt } = useApp();
   const close = useCallback(() => dispatch({ type: "setReminder", open: false }), [dispatch]);
   const rent = items.find((i) => i.id === "rent1");
   if (!state.reminderOpen || !rent) return null;
@@ -16,22 +16,22 @@ export function ReminderDialog() {
   return (
     <Dialog labelledBy="reminder-title" onClose={close}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span className="pill p-fam"><Icon name="bell" size={14} />Reminder · in 3 days</span>
-        <button type="button" className="x-btn" onClick={close} aria-label="Close">
+        <span className="pill p-fam"><Icon name="bell" size={14} />{t("remIn3")}</span>
+        <button type="button" className="x-btn" onClick={close} aria-label={t("close")}>
           <Icon name="x" size={18} />
         </button>
       </div>
-      <h2 id="reminder-title" className="disp" style={{ fontSize: 34 }}>Rent is due on 1 September</h2>
+      <h2 id="reminder-title" className="disp" style={{ fontSize: 34 }}>{t("rentDueOn", { date: fmt.longDate(rent.due) })}</h2>
       <div>
         <span className="big num" style={{ fontSize: 52 }}>{money(rent.amountGbp)}</span>{" "}
         <span className="mono muted num">≈ {moneyAlt(rent.amountGbp)}</span>
       </div>
       <p className="muted">
-        To {rent.payee} · reference {referenceFor(rent, state.references)}. Your transfer is ready to check.
+        {t("remBody", { payee: rent.payee, ref: referenceFor(rent, state.references) })}
       </p>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         {state.paid[rent.id] ? (
-          <span className="banner ok" style={{ flex: 1 }}>Already paid. Nothing to do.</span>
+          <span className="banner ok" style={{ flex: 1 }}>{t("alreadyPaid")}</span>
         ) : (
           <button type="button" className="btn dark" style={{ flex: "1 1 180px" }} onClick={() => dispatch({ type: "openPay", id: rent.id })}>
             {t("payWise")}
@@ -43,10 +43,10 @@ export function ReminderDialog() {
           className="btn ghost"
           onClick={() => {
             close();
-            notify("Snoozed. We’ll remind you tomorrow.");
+            notify(t("snoozed"));
           }}
         >
-          Remind me tomorrow
+          {t("remindTomorrow")}
         </button>
       </div>
     </Dialog>

@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, type ReactNode } from "react";
-import { INITIAL_PAID, ROADMAP } from "@/lib/demo-data";
-import { translate, type MessageKey } from "@/lib/i18n";
+import { DEMO_TODAY, INITIAL_PAID, ROADMAP } from "@/lib/demo-data";
+import { countryName, dayAndMonth, formatLongDate, formatShortDate, isMessageKey, translate, type MessageKey } from "@/lib/i18n";
 import { SAMPLE_GBP_USD, alternate, display } from "@/lib/money";
 import { DEFAULT_MOVE, DESTINATIONS, ORIGINS, findCountry, type Country } from "@/lib/places";
 import type { Currency, FxQuote, Lang, Move, RoadmapItem } from "@/lib/types";
@@ -136,6 +136,16 @@ interface AppContextValue {
   dispatch: React.Dispatch<Action>;
   items: RoadmapItem[];
   t: (key: MessageKey, vars?: Record<string, string | number>) => string;
+  /** An item's title or one-line note in the chosen language. */
+  itemText: (item: RoadmapItem, field: "title" | "note") => string;
+  /** Dates, country names and "2 hours ago" in the chosen language. */
+  fmt: {
+    longDate: (isoDate: string) => string;
+    shortDate: (isoDate: string) => string;
+    dayMonth: (isoDate: string) => { day: string; month: string };
+    country: (c: Country) => string;
+    ago: (hoursAgo: number) => string;
+  };
   /** Amount in the chosen display currency. */
   money: (amountGbp: number, decimals?: number) => string;
   /** Same amount in the other currency, for the "≈" line. */
@@ -213,11 +223,26 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<AppContextValue>(() => {
     const rate = state.fx.rate;
+    const lang = state.lang;
+    const t = (key: MessageKey, vars?: Record<string, string | number>) => translate(lang, key, vars);
     return {
       state,
       dispatch,
       items: state.extraItems.length ? [...ROADMAP, ...state.extraItems] : ROADMAP,
-      t: (key, vars) => translate(state.lang, key, vars),
+      t,
+      itemText: (item, field) => {
+        const key = `${field}_${item.id}`;
+        if (isMessageKey(key)) return t(key);
+        // Items added from an uploaded document have no fixed translation.
+        return field === "title" ? item.title : t("foundIn", { doc: t(`doc_${item.doc}`) });
+      },
+      fmt: {
+        longDate: (iso) => formatLongDate(lang, iso),
+        shortDate: (iso) => formatShortDate(lang, iso),
+        dayMonth: (iso) => dayAndMonth(lang, iso),
+        country: (c) => countryName(lang, c.iso, c.name),
+        ago: (hours) => relativeTime(lang, hours, t),
+      },
       money: (gbp, decimals = 0) => display(gbp, state.currency, rate, decimals),
       moneyAlt: (gbp, decimals = 0) => alternate(gbp, state.currency, rate, decimals),
       notify,
@@ -231,6 +256,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   }, [state, notify]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+}
+
+function relativeTime(lang: Lang, hoursAgo: number, t: AppContextValue["t"]): string {
+  if (hoursAgo <= 0) return t("justNow");
+  if (hoursAgo < 24) return new Intl.RelativeTimeFormat(lang, { numeric: "auto", style: "narrow" }).format(-hoursAgo, "hour");
+  const when = new Date(Date.parse(DEMO_TODAY + "T12:00:00Z") - hoursAgo * 3_600_000);
+  return new Intl.DateTimeFormat(lang, { weekday: "short", timeZone: "UTC" }).format(when);
 }
 
 export function useApp(): AppContextValue {

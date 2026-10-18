@@ -46,6 +46,7 @@ Keep branches short: aim to merge every 1 to 2 hours. Small, frequent merges = n
 - Components: `src/components/<feature>/` (e.g. `src/components/payments/`).
 - Reuse the styles in `src/app/globals.css` (`card`, `btn`, `pill`, `banner`, …) and the icons in `src/components/Icon.tsx`.
 - Money and Wise: always go through `src/services/payments.ts`. Nothing sends without a confirm step.
+- Text on screen: never type English straight into a component. Add a key to `src/lib/messages/en.ts`, add the same key to the other five files in `src/lib/messages/`, then use `t("yourKey")`. `npm run typecheck` tells you if a language is missing one.
 
 ## Shared files: small edits only, tell the team
 

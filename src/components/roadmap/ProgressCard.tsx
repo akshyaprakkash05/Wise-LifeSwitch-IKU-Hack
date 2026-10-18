@@ -33,11 +33,11 @@ export function ProgressCard({ summary }: { summary: ReturnType<typeof summarise
       </div>
       <div style={{ display: "grid", gap: 6, minWidth: 0 }}>
         <span className="eyebrow">{t("progress")}</span>
-        <span className="disp num" style={{ fontSize: 30 }}>
-          {paidCount} of {items.length} paid
+        <span className="disp num" style={{ fontSize: "clamp(22px, 2vw, 30px)", overflowWrap: "break-word" }}>
+          {t("paidOf", { paid: paidCount, total: items.length })}
         </span>
         <span className="muted num" style={{ fontSize: 14 }}>
-          {money(paidAmount)} sent · {money(total - paidAmount)} to go
+          {t("sentToGo", { sent: money(paidAmount), left: money(total - paidAmount) })}
         </span>
       </div>
     </div>

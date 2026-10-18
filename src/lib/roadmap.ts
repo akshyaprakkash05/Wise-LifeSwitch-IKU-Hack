@@ -10,27 +10,17 @@ export function referenceFor(item: RoadmapItem, references: Record<string, strin
 }
 
 export function statusOf(item: RoadmapItem, paid: boolean, references: Record<string, string>): ItemStatus {
-  if (paid) return { key: "done", label: "Paid", pill: "p-ok", dot: "ok" };
-  if (needsReference(item, references)) return { key: "warn", label: "Needs attention", pill: "p-warn", dot: "warn" };
-  if (item.ready) return { key: "up", label: "Ready to pay", pill: "p-ready", dot: "ready" };
-  if (item.recurring) return { key: "up", label: "Reminder set", pill: "p-idle", dot: "" };
-  return { key: "up", label: "Upcoming", pill: "p-idle", dot: "" };
+  if (paid) return { key: "done", label: "status_done", pill: "p-ok", dot: "ok" };
+  if (needsReference(item, references)) return { key: "warn", label: "status_warn", pill: "p-warn", dot: "warn" };
+  if (item.ready) return { key: "up", label: "status_ready", pill: "p-ready", dot: "ready" };
+  if (item.recurring) return { key: "up", label: "status_reminder", pill: "p-idle", dot: "" };
+  return { key: "up", label: "status_upcoming", pill: "p-idle", dot: "" };
 }
 
 const DAY_MS = 86_400_000;
 
 export function daysUntil(isoDate: string, today: string = DEMO_TODAY): number {
   return Math.round((Date.parse(isoDate) - Date.parse(today)) / DAY_MS);
-}
-
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-export function dayAndMonth(isoDate: string): { day: string; month: string } {
-  const d = new Date(isoDate + "T00:00:00Z");
-  return {
-    day: String(d.getUTCDate()),
-    month: MONTHS[d.getUTCMonth()],
-  };
 }
 
 export function summarise(items: RoadmapItem[], paid: Record<string, boolean>) {
