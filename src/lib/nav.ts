@@ -19,7 +19,7 @@ export const NAV: NavItem[] = [
   { href: "/documents", label: "nav_docs", icon: "doc", breakBefore: true, blurb: "sub_docs" },
   { href: "/payments", label: "nav_pay", icon: "swap", blurb: "sub_pay" },
   { href: "/reminders", label: "nav_rem", icon: "bell", blurb: "sub_rem" },
-  { href: "/circle", label: "nav_circle", icon: "users", breakBefore: true, blurb: "sub_circle" },
+  { href: "/circle", label: "nav_circle", icon: "users", breakBefore: true, blurb: "sub_circle", live: true },
   { href: "/split", label: "nav_split", icon: "receipt", blurb: "sub_split" },
   { href: "/shield", label: "nav_shield", icon: "shield", blurb: "sub_shield" },
   { href: "/care", label: "nav_care", icon: "heart", blurb: "sub_care" },

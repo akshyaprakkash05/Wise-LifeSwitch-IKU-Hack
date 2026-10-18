@@ -20,5 +20,6 @@ Safeguards: every AI-extracted value shows the sentence it came from, and the us
 | UI design and mock-ups | Claude | Generated interactive mock-ups and the design direction (colours, type, layout) | Reviewed, directed changes (name, Circle map, layout), chose the final look |
 | Roadmap code | Claude | Wrote the initial Next.js code for the Roadmap page, shell and mocked Wise payment flow | Reviewed, ran and tested it; owns all further changes |
 | Voice button + ElevenLabs route | Claude | Wrote the TTS route and Listen button; picked default voices via the ElevenLabs voice library | Chose ElevenLabs, set up the account and key, tested the voice |
+| Circle (Anusha) | Claude Code | Wrote the Circle screens, API routes and Postgres schema (Tiger Data), the invite and join flow, chat, opt-in sharing and city-only location; drafted the Tamil and Hindi Circle text | Designed the feature and scope (no calling, no streaks), chose Tiger Data and Safari location, tested on phones; Tamil and Hindi to be checked by a native speaker |
 
 Team members should add a row when they use AI for their own feature.
