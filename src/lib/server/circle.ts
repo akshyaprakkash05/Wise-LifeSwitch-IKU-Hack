@@ -33,7 +33,7 @@ export async function createCircle(owner: { name: string; relation: string }) {
     );
     if (res.rowCount) {
       const { id, code: c } = res.rows[0];
-      await addActivity(c, id, "milestone", `${owner.name} started the Circle`);
+      await addActivity(c, id, "milestone", "started the Circle");
       return { code: c as string, memberId: id as string };
     }
   }
@@ -49,7 +49,7 @@ export async function joinCircle(code: string, member: { name: string; relation:
   );
   if (!res.rowCount) return null;
   const memberId = res.rows[0].id as string;
-  await addActivity(code, memberId, "milestone", `${member.name} joined the Circle`);
+  await addActivity(code, memberId, "milestone", "joined the Circle");
   return { code, memberId };
 }
 
