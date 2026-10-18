@@ -1,16 +1,17 @@
-# Team workflow (hackathon)
+# How we worked together
 
-`main` is always demo-ready. Everyone builds on a short branch and merges back often.
+Four of us built LifeSwitch in under 24 hours. Our one rule: `main` is always demo-ready. Everyone built on their own branch, tested it, and merged back through a pull request.
 
-## Who owns what
+## Who did what
 
-| Person | Pages / features | Branch |
+| Person | Built | Branches |
 | --- | --- | --- |
-| Akshya | Roadmap (done), UI + design system, Set up move, Care Card, ElevenLabs voice (done) | `feature/setup`, `feature/care` |
-| Anusha | Documents (AI extraction), Payments, Reminders, Circle, Group Split | `feature/documents`, `feature/payments`, … |
-| Sadana | Explain and flag, Scam Shield, Language switch, Setup and deploy | `feature/shield`, `feature/deploy`, … |
+| Akshya | App shell and design system, Roadmap, Set up move, ElevenLabs voice, translations into six languages, combining everyone's work | `feature/setup`, `feature/i18n-full`, `preview/*` |
+| Sadana | Documents, Payments, Reminders, the Scam Shield rules, Care Card | `sadana`, `sadana-care` |
+| Anusha | Circle, Group Split, Scam Shield page | `feature/circle`, `feature/split`, `feature/shield` |
+| Nessah | Research, slides, Devpost write-up, and the dashboard mock-up with the team | |
 
-## First time
+## Getting started
 
 ```bash
 git clone https://github.com/akshyaprakkash05/Wise-LifeSwitch-IKU-Hack.git
@@ -20,42 +21,40 @@ copy .env.example .env.local    # Windows  (Mac/Linux: cp .env.example .env.loca
 npm run dev
 ```
 
-Ask Akshya privately for any API keys. Never paste keys in the repo, Discord or WhatsApp groups.
+The app runs without keys using labelled samples. API keys were shared privately and never posted in the repo or group chats.
 
-## Every feature, every time
+## Building a feature
 
 ```bash
 git checkout main
 git pull                          # start from the latest main
 git checkout -b feature/payments  # one branch per feature
-# ...build...
-npm run build                     # must pass before you push
+# ...build and test...
+npm run build                     # must pass before pushing
+npm test
 git add -A
 git commit -m "Payments: transfer list and confirm step"
-git pull origin main              # bring in teammates' work, fix any conflicts
+git pull origin main              # bring in teammates' work and fix any conflicts
 git push -u origin feature/payments
 ```
 
-Then open a **Pull Request** into `main` on GitHub. Someone else glances at it and merges. Delete the branch after merging.
+Then open a pull request into `main`. When several branches were ready at once, we first combined them on a `preview/` branch, checked every page loaded and the tests passed, and only then merged into `main`.
 
-Keep branches short: aim to merge every 1 to 2 hours. Small, frequent merges = no painful conflicts at the end.
+## Where code goes
 
-## Where your code goes
+- **Pages:** `src/app/<route>/page.tsx`, then `live: true` for that route in `src/lib/nav.ts`.
+- **Components:** `src/components/<feature>/`.
+- **Logic and rules:** `src/lib/<feature>/`, with tests in `tests/`.
+- **Styles:** reuse `card`, `btn`, `pill`, `banner` and the colour tokens in `src/app/globals.css`, and the icons in `src/components/Icon.tsx`.
+- **Money:** everything goes through `src/services/payments.ts`, and nothing sends without a confirm step.
+- **Text on screen:** no English typed straight into components. Shared text lives in `src/lib/messages/` (one file per language), and each feature keeps its own text in `src/lib/<feature>/strings.ts`.
 
-- Page: `src/app/<route>/page.tsx` (e.g. `src/app/payments/page.tsx`), then set `live: true` for that route in `src/lib/nav.ts`.
-- Components: `src/components/<feature>/` (e.g. `src/components/payments/`).
-- Reuse the styles in `src/app/globals.css` (`card`, `btn`, `pill`, `banner`, …) and the icons in `src/components/Icon.tsx`.
-- Money and Wise: always go through `src/services/payments.ts`. Nothing sends without a confirm step.
-- Text on screen: never type English straight into a component. Add a key to `src/lib/messages/en.ts`, add the same key to the other five files in `src/lib/messages/`, then use `t("yourKey")`. `npm run typecheck` tells you if a language is missing one.
+## Shared files
 
-## Shared files: small edits only, tell the team
-
-`src/state/app-state.tsx`, `src/lib/types.ts`, `src/lib/demo-data.ts`, `src/lib/i18n.ts`, `src/lib/nav.ts`, `src/app/globals.css`, `package.json`.
-
-Add to them; don't rewrite or reorder them. Post in the group chat when you change one, so others pull it.
+`src/state/app-state.tsx`, `src/lib/types.ts`, `src/lib/demo-data.ts`, `src/lib/i18n.ts`, `src/lib/nav.ts`, `src/app/globals.css` and `package.json` are used by everyone. We only added to them, never rewrote or reordered them, and told the group whenever one changed.
 
 ## Before the demo
 
-- Feature freeze at the agreed time: only fixes after that.
-- Everyone merges into `main`, then one person runs `npm run build` and the full demo flow on `main`.
-- Add a row to `AI_USAGE.md` for any AI you used.
+- Feature freeze at the agreed time, with only fixes after that.
+- Everything is merged into `main`, and one person runs `npm run build`, `npm test` and the full demo flow on `main`.
+- Every use of AI is recorded in [AI_USAGE.md](AI_USAGE.md).
