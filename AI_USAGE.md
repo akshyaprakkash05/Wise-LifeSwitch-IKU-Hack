@@ -27,4 +27,3 @@ This file documents how AI was used during the hackathon and the work carried ou
 | Group Split (Anusha) | Claude Code | Used for code suggestions for the Gemini receipt-reading route, share calculations, Split screens and Apple Pay flow in Stripe test mode. | Designed the receipt-scanning and tagging flow, where each person pays their own share; chose Apple Pay in Safari; reviewed the implementation and tested with receipts and phones. |
 | Care Card (Sadana) | Claude Code | Used for code suggestions and initial translation drafts in Tamil, Hindi, Spanish, French and Chinese. | Designed and developed the feature from the team mock-up, defined the spending rules, and reviewed and tested the implementation. Translations still require native-speaker review. |
 
-Team members should add a row when they use AI for their own features.
