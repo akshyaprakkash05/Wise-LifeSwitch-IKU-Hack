@@ -6,9 +6,10 @@ This file is kept up to date through the hackathon so judges can see exactly whe
 
 | Where | What the AI does | Status |
 | --- | --- | --- |
-| Document reading | Gemini reads offer letters, tenancy agreements and invoices and returns each payment as structured JSON (payee, amount, currency, due date, reference, source sentence) | Planned. The Roadmap currently uses seeded demo data in `src/lib/demo-data.ts` |
+| Document reading | Gemini reads offer letters, tenancy agreements and invoices and returns each payment as structured JSON (payee, amount, currency, due date, reference, source sentence) | Live on the Documents tab via `src/app/api/extract/route.ts` (needs `GEMINI_API_KEY`; without it a built-in sample is used and labelled). The Roadmap starts from seeded demo data in `src/lib/demo-data.ts` |
 | Term explanations | Plain-language explanations in the user's language | Currently hand-written in `src/lib/i18n.ts`; Gemini will generate them for new terms |
 | Receipt reading | Gemini reads a receipt photo and returns each line item with its price, plus service charge and extras, as JSON. The share maths is ordinary code, not AI | Live via `src/app/api/split/scan/route.ts` |
+| Scam Shield | The risk verdict uses rule-based checks, not AI. Gemini only reads who is asking for money and their bank details from a pasted message or screenshot (plain patterns are used if Gemini is unavailable), and the user checks what was read | Live via `src/app/api/shield/read/route.ts` |
 | Voice | ElevenLabs `eleven_multilingual_v2` reads the roadmap aloud in the chosen language (native Tamil voice for Tamil) | Live via `src/app/api/tts/route.ts`; browser voice as fallback |
 
 Safeguards: every AI-extracted value shows the sentence it came from, and the user checks it before it joins the roadmap. Nothing is paid without the user's confirmation.

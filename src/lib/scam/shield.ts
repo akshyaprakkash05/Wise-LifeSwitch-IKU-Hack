@@ -160,3 +160,19 @@ export function assessPayment(item: ScamInput, knownPayees: KnownPayee[] = []): 
 
   return { level, score, signals, bankIssues, advice, needsConfirmation: level === "high", detailsInvalid: bankIssues.length > 0 };
 }
+
+/** Where each warning phrase sits in the text, so the Scam Shield page can highlight it. */
+export function riskyPhrases(text: string): { start: number; end: number; code: string; title: string }[] {
+  const found: { start: number; end: number; code: string; title: string }[] = [];
+  for (const rule of LANGUAGE_RULES) {
+    const global = new RegExp(rule.pattern.source, rule.pattern.flags.includes("g") ? rule.pattern.flags : rule.pattern.flags + "g");
+    for (const m of text.matchAll(global)) {
+      if (m.index === undefined || !m[0]) continue;
+      found.push({ start: m.index, end: m.index + m[0].length, code: rule.code, title: rule.title });
+    }
+  }
+  // Keep the earliest of any overlapping matches.
+  found.sort((a, b) => a.start - b.start || b.end - a.end);
+  return found.filter((f, i) => i === 0 || f.start >= found[i - 1].end);
+}
+
