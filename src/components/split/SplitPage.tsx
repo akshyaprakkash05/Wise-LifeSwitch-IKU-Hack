@@ -35,7 +35,7 @@ export function SplitPage() {
       .catch(() => {});
   }, []);
 
-  async function scan(files: FileList | null) {
+  async function scan(files: FileList | File[] | null) {
     const file = files?.[0];
     if (!file) return;
     setScanning(true);
@@ -55,6 +55,18 @@ export function SplitPage() {
     } catch (err) {
       setError((err as Error).message || t("errGeneric"));
     } finally {
+      setScanning(false);
+    }
+  }
+
+  /** A built-in receipt photo, still read by Gemini, for demos without a real receipt. */
+  async function trySample() {
+    setScanning(true);
+    try {
+      const blob = await (await fetch("/samples/receipt-dishoom.jpg")).blob();
+      await scan([new File([blob], "sample-receipt.jpg", { type: "image/jpeg" })]);
+    } catch {
+      setError(t("errGeneric"));
       setScanning(false);
     }
   }
@@ -124,6 +136,11 @@ export function SplitPage() {
           <b>{scanning ? t("reading") : t("snap")}</b>
           <input id="receipt-input" type="file" accept="image/*" capture="environment" className="sr-only-x" disabled={scanning} onChange={(e) => scan(e.target.files)} />
         </label>
+      )}
+      {!receipt && (
+        <button type="button" className="btn ghost sm" style={{ justifySelf: "start" }} disabled={scanning} onClick={trySample}>
+          {t("trySample")}
+        </button>
       )}
       {error && <div className="banner warn">{error}</div>}
 

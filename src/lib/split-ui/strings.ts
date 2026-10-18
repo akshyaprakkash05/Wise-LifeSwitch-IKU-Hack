@@ -9,6 +9,7 @@ export const SPLIT_EN = {
   sub: "Snap a bill. Everyone pays only for what they had.",
   snap: "Take a photo of the receipt",
   reading: "Reading the receipt…",
+  trySample: "No receipt handy? Try a sample one",
   who: "Who's splitting",
   addPerson: "Add a flatmate",
   add: "Add",
