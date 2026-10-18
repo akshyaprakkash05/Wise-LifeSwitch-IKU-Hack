@@ -251,7 +251,6 @@ export const es: Messages = {
   cc_travel: "compartió el plan de viaje: {from} → {to}",
   cc_messageOne: "Escribir a {name}",
   cc_sample: "Círculo de ejemplo",
-  cc_sampleNote: "Es una familia de ejemplo para que veas cómo funciona. Invita a tu familia para compartir de verdad.",
   cc_live: "Círculo en vivo",
   cc_mapLabel: "Mapa con {list}",
   cc_updateCity: "Actualizar mi ciudad",

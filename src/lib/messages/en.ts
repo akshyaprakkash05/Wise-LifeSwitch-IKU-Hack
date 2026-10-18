@@ -270,7 +270,6 @@ export const en = {
   cc_travel: "shared the travel plan: {from} → {to}",
   cc_messageOne: "Message {name}",
   cc_sample: "Sample Circle",
-  cc_sampleNote: "This is a sample family so you can see how it works. Invite your own family to share for real.",
   cc_live: "Live Circle",
   cc_mapLabel: "Map showing {list}",
   cc_updateCity: "Update my city",

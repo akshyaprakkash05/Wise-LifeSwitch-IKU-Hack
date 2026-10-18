@@ -103,9 +103,6 @@ function SampleCircle({ onCreated }: { onCreated: (m: Membership) => void }) {
   return (
     <>
       <Header onInvite={() => setInviteOpen(true)} badge={<span className="pill p-fam">{t("cc_sample")}</span>} />
-      <p className="cc-note">
-        <Icon name="users" size={16} /> {t("cc_sampleNote")}
-      </p>
       <ShareSettings />
       <div className="row" style={{ alignItems: "stretch" }}>
         <ChatCard

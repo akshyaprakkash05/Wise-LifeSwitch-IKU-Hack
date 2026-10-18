@@ -251,7 +251,6 @@ export const zh: Messages = {
   cc_travel: "分享了行程：{from} → {to}",
   cc_messageOne: "给{name}发消息",
   cc_sample: "示例家人圈",
-  cc_sampleNote: "这是一个示例家庭，方便你了解功能。邀请你的家人，开始真正的分享。",
   cc_live: "实时家人圈",
   cc_mapLabel: "地图：{list}",
   cc_updateCity: "更新我的城市",

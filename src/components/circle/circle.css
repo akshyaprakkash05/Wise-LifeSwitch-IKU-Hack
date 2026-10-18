@@ -1,7 +1,4 @@
 /* Circle screens. Builds on the shared tokens and classes in globals.css. */
-.cc-note { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--saffron-ink); background: var(--saffron-soft); border-radius: 14px; padding: 10px 14px; }
-.cc-note svg { flex: none; }
-
 /* What your Circle sees */
 .cc-share { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; }
 .cc-share li { display: flex; align-items: center; gap: 12px; background: var(--ground); border-radius: 14px; padding: 10px 12px; }

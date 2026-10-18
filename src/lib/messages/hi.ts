@@ -251,7 +251,6 @@ export const hi: Messages = {
   cc_travel: "ने यात्रा योजना शेयर की: {from} → {to}",
   cc_messageOne: "{name} को मैसेज करें",
   cc_sample: "सैंपल सर्कल",
-  cc_sampleNote: "यह एक सैंपल परिवार है ताकि आप देख सकें कि यह कैसे काम करता है। असल में शेयर करने के लिए अपने परिवार को बुलाएँ।",
   cc_live: "लाइव सर्कल",
   cc_mapLabel: "मैप: {list}",
   cc_updateCity: "मेरा शहर अपडेट करें",
