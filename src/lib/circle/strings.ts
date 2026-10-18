@@ -48,6 +48,7 @@ export const CIRCLE_EN = {
   gone: "This Circle no longer exists.",
   startNew: "Start a new one",
   errGeneric: "Something went wrong. Try again.",
+  splitBill: "Split a bill with the Circle",
   rel_student: "Student",
   rel_mum: "Mum",
   rel_dad: "Dad",

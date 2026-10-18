@@ -55,6 +55,27 @@ create table if not exists circle_messages (
   body text not null,
   at timestamptz not null default now()
 );
+create table if not exists splits (
+  id uuid primary key default gen_random_uuid(),
+  circle_code text,
+  merchant text not null,
+  currency text not null,
+  payer text not null,
+  receipt jsonb not null,
+  created_at timestamptz not null default now()
+);
+create table if not exists split_shares (
+  id uuid primary key default gen_random_uuid(),
+  split_id uuid not null references splits(id) on delete cascade,
+  person text not null,
+  amount_minor integer not null,
+  items jsonb not null default '[]',
+  status text not null default 'unpaid',
+  method text,
+  payment_intent text unique,
+  paid_at timestamptz
+);
+create index if not exists split_shares_split_idx on split_shares (split_id);
 create index if not exists circle_activities_circle_idx on circle_activities (circle_id, id);
 create index if not exists circle_messages_circle_idx on circle_messages (circle_id, id);
 `;

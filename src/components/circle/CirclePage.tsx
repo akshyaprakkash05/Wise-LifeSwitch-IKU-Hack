@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { PERSON } from "@/lib/demo-data";
 import { circleApi, useCircleFeed, useMembership, type CircleFeed, type Membership } from "@/lib/circle/client";
@@ -95,6 +96,9 @@ function CircleView({ membership, onLeave }: { membership: Membership; onLeave: 
       <div className="circle-cols">
         <div style={{ display: "grid", gap: 16, alignContent: "start" }}>
           <Members feed={feed} meId={membership.memberId} />
+          <Link href="/split" className="btn ghost sm" style={{ justifySelf: "start" }}>
+            <Icon name="receipt" size={16} /> {t("splitBill")}
+          </Link>
           {me && <MySharing membership={membership} sharing={me.sharing} onChange={refresh} />}
         </div>
 
