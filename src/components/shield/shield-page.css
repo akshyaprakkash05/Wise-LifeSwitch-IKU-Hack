@@ -1,0 +1,19 @@
+/* Scam Shield page. Reuses .shield/.signal from tabs.css and the shared classes in globals.css. */
+.sh-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 900px) { .sh-cols { grid-template-columns: 1fr; } }
+.sh-text { width: 100%; min-height: 160px; resize: vertical; font: inherit; line-height: 1.5; }
+.sh-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sh-fields .wide { grid-column: 1 / -1; }
+@media (max-width: 520px) { .sh-fields { grid-template-columns: 1fr; } }
+.sh-verdict { display: flex; gap: 14px; align-items: center; }
+.sh-verdict h2 { font-size: clamp(24px, 3vw, 32px); line-height: 1.05; }
+.sh-meter { height: 10px; border-radius: 999px; background: rgba(0, 0, 0, 0.08); overflow: hidden; }
+.sh-meter > span { display: block; height: 100%; border-radius: inherit; }
+.shield.low .sh-meter > span { background: var(--ok); }
+.shield.medium .sh-meter > span { background: #b86e00; }
+.shield.high .sh-meter > span { background: #b42318; }
+.sh-quote { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--surface); border-radius: 14px; padding: 12px 14px; font-size: 14px; line-height: 1.6; max-height: 260px; overflow-y: auto; }
+.sh-quote mark { background: #ffd5cf; color: #7a1208; border-radius: 4px; padding: 0 2px; font-weight: 700; }
+.sh-steps { display: grid; gap: 8px; font-size: 14px; }
+.sh-steps li { display: flex; gap: 10px; align-items: flex-start; }
+.sh-steps li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; margin-top: 7px; flex: none; opacity: 0.6; }
