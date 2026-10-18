@@ -6,9 +6,9 @@ import type { Lang } from "@/lib/types";
 
 export const CIRCLE_EN = {
   title: "Circle",
-  sub: "Your family, close by. You choose what they see.",
+  sub: "Your people, close by. You choose what they see.",
   startTitle: "Start your Circle",
-  startBody: "A private group for you and your family. Share updates like “Rent paid” or “Landed in London”, and chat.",
+  startBody: "A private group for you and your friends or family. Share updates like “Rent paid” or “Landed in London”, and chat.",
   yourName: "Your name",
   youAre: "You are",
   create: "Create my Circle",
@@ -18,8 +18,8 @@ export const CIRCLE_EN = {
   joinTitle: "You've been invited",
   joinBody: "Join to see their moving-abroad updates and chat. They choose what they share, and so do you.",
   joinCta: "Join the Circle",
-  invite: "Invite family",
-  inviteText: "Join my LifeSwitch Circle so we can stay close while I move abroad.",
+  invite: "Invite",
+  inviteText: "Join my LifeSwitch Circle so we can share updates, split bills and stay close.",
   linkCopied: "Invite link copied",
   you: "you",
   activeNow: "active now",
@@ -63,7 +63,7 @@ export type CircleKey = keyof typeof CIRCLE_EN;
 
 const CIRCLE_TA: Partial<Record<CircleKey, string>> = {
   title: "குடும்ப வட்டம்",
-  sub: "உங்கள் குடும்பம், அருகிலேயே. அவர்கள் எதைப் பார்க்கலாம் என்பதை நீங்களே தேர்வு செய்யுங்கள்.",
+  sub: "உங்கள் அன்புக்குரியவர்கள், அருகிலேயே. அவர்கள் எதைப் பார்க்கலாம் என்பதை நீங்களே தேர்வு செய்யுங்கள்.",
   startTitle: "உங்கள் வட்டத்தைத் தொடங்குங்கள்",
   startBody: "உங்களுக்கும் உங்கள் குடும்பத்துக்குமான தனிப்பட்ட குழு. “வாடகை செலுத்தப்பட்டது” அல்லது “லண்டன் வந்தடைந்தேன்” போன்ற செய்திகளைப் பகிருங்கள், பேசுங்கள்.",
   yourName: "உங்கள் பெயர்",
@@ -74,7 +74,7 @@ const CIRCLE_TA: Partial<Record<CircleKey, string>> = {
   join: "சேர்",
   joinTitle: "உங்களுக்கு அழைப்பு வந்துள்ளது",
   joinCta: "வட்டத்தில் சேர்",
-  invite: "குடும்பத்தை அழை",
+  invite: "அழை",
   you: "நீங்கள்",
   shareTitle: "என் செய்திகளைப் பகிர்",
   shareWhere: "நான் எங்கே இருக்கிறேன் என்று பகிர்",
@@ -97,7 +97,7 @@ const CIRCLE_TA: Partial<Record<CircleKey, string>> = {
 
 const CIRCLE_HI: Partial<Record<CircleKey, string>> = {
   title: "परिवार सर्कल",
-  sub: "आपका परिवार, आपके पास। वे क्या देखें, यह आप तय करते हैं।",
+  sub: "आपके अपने, आपके पास। वे क्या देखें, यह आप तय करते हैं।",
   startTitle: "अपना सर्कल शुरू करें",
   startBody: "आपके और आपके परिवार के लिए एक निजी ग्रुप। “किराया भर दिया” या “लंदन पहुँच गई” जैसे अपडेट शेयर करें और बात करें।",
   yourName: "आपका नाम",
@@ -108,7 +108,7 @@ const CIRCLE_HI: Partial<Record<CircleKey, string>> = {
   join: "जुड़ें",
   joinTitle: "आपको आमंत्रित किया गया है",
   joinCta: "सर्कल से जुड़ें",
-  invite: "परिवार को बुलाएँ",
+  invite: "बुलाएँ",
   you: "आप",
   shareTitle: "मेरे अपडेट शेयर करें",
   shareWhere: "मैं कहाँ हूँ, शेयर करें",
